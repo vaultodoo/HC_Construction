@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_project_phase_template_form" model="ir.ui.view">
+        <field name="name">project.phase.template.form</field>
+        <field name="model">project.phase.template</field>
+        <field name="arch" type="xml">
+            <form string="Project Phase Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_project_phase_template_tree" model="ir.ui.view">
+        <field name="name">project.phase.template.tree</field>
+        <field name="model">project.phase.template</field>
+        <field name="arch" type="xml">
+            <tree string="Project Phase Template">
+                <field name="name"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_project_phase_template" model="ir.actions.act_window">
+        <field name="name">Project Phase Template</field>
+        <field name="res_model">project.phase.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_construction_project_stages" name="Project Stages" parent="menu_const_configuration" action="action_project_phase_template" sequence="9"/>
+</odoo>

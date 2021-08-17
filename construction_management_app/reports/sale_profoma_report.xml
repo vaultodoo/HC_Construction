@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_proforma_invoice_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <div class="company_address" align="centre" >
+                        <div>
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="float-left" alt="Logo" style="height:100px; width:100px;"/>
+                            <strong t-field="o.company_id.partner_id.name" style="margin-left:250px; font-size:25px;"/>
+                        </div>
+                        <span t-field="o.company_id.partner_id.street" style="margin-left:350px; font-size:20px;"/>,
+                        <span t-field="o.company_id.partner_id.street2" style="font-size:20px;"/>,
+                        <span t-field="o.company_id.partner_id.city" style="font-size:20px;"/><br/>
+                        <span t-field="o.company_id.partner_id.state_id.name" style="margin-left:350px; font-size:20px;"/>,
+                        <span t-field="o.company_id.partner_id.country_id.name" style="font-size:20px;"/><br/>
+                        <span t-field="o.company_id.partner_id.phone" style="font-size:20px;margin-left:350px;"/>
+                    </div>
+                    <h1 style="text-align:center;">PRO-FORMA INVOICE</h1>
+
+                    <table style="width:100%;border:1px solid black;padding:20px 20px;">
+                        <tr>
+                            <td>Customer Name &amp; Address</td>
+                            <td style="width:25%;"></td>
+                            <td>Invoice No.</td>
+                            <td style="width:25%;"></td>
+
+                        </tr>
+                        <tr>
+                            <td><strong><span t-field="o.partner_id.name"/></strong><br/>
+                                <span t-field="o.partner_id.street"/>, <span t-field="o.partner_id.street2"/><br/>
+                                <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.zip"/><br/>
+                                Ph:<span t-field="o.partner_id.phone"/>
+                            </td>
+                            <td style="width:25%;"></td>
+                            <td> <span>Date:</span> </td>
+                            <td style="width:25%;"></td>
+
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="border:1px solid black; width:100%;">
+                        <tr style="border:1px solid black;">
+                            <th style="text-align:left;">Sr No.</th>
+                            <th style="text-align:left;">Product</th>
+                            <th style="text-align:left;">Description</th>
+                            <th style="text-align:left;">Qty<br/> S\M</th>
+                            <th style="text-align:left;">Rate<br/> Dhs</th>
+                            <th style="text-align:left;">Amount<br/> Dhs</th>
+                        </tr>
+                        <t t-set="sl" t-value="0"/>
+                        <t t-set="qt" t-value="0"/>
+                        <tr t-foreach="o.order_line" t-as="order" style="border:1px solid black;">
+                            <t t-set="sl" t-value="sl+1"/>
+                            <td><span t-esc="sl"/></td>
+                            <t t-set="qt" t-value="order.product_uom_qty-order.qty_delivered"/>
+                            <t t-if="qt > 0">
+                                <td><span t-esc="order.product_id.name"/> </td>
+                                <td><span t-esc="order.name"/> </td>
+                                <td><span t-esc="qt"/> </td>
+                                <td><span t-esc="order.price_unit"/> </td>
+                                <td><span t-esc="order.price_unit*qt"/> </td>
+                            </t>
+
+                        </tr>
+
+
+
+                    </table>
+                </div>
+            </t>
+        </t>
+
+    </template>
+
+    <record id="proforma_paper_format" model="report.paperformat">
+        <field name="name">European A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">4</field>
+        <field name="margin_bottom">4</field>
+        <field name="margin_left">4</field>
+        <field name="margin_right">4</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <report
+            string="Proforma Invoice"
+            id="action_report_proforma_invoice"
+            model="sale.order"
+            name="construction_management_app.report_proforma_invoice_template"
+            file="construction_management_app.report_proforma_invoice_template"
+            report_type="qweb-pdf"
+            paperformat="construction_management_app.proforma_paper_format"/>
+
+</odoo>
