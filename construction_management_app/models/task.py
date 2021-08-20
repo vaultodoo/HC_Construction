@@ -177,7 +177,9 @@ class ProjectTask(models.Model):
     )
     start_date = fields.Datetime(string="Start Date")
     stage = fields.Char(string='Stage', related="stage_id.name", store=True)
+    final_stage = fields.Boolean(related="stage_id.final_stage", store=True)
     phase_id = fields.Many2one('project.phase.template', string="Project Phase")
+    proforma_generated = fields.Selection([('yes', 'YES'), ('no', 'NO')], string='Proforma Generated', default='no')
     # @api.multi #odoo13
     def view_stock_moves(self):
         for rec in self:
@@ -375,10 +377,3 @@ class ReturnMovesProducts(models.Model):
             raise ValidationError("Return quantity cannot be greater than total quantity")
 
 
-class SaleOrderInherit(models.Model):
-    _inherit = 'sale.order'
-
-    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
-
-    def action_send_proforma_invoice(self):
-        return self.env.ref('construction_management_app.action_report_proforma_invoice').report_action(self)

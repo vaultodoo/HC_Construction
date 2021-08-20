@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+
 
 class ProjectProject(models.Model):
     _inherit = 'project.project'
@@ -39,6 +41,7 @@ class ProjectProject(models.Model):
     document_ids = fields.One2many('upload.documents', 'project_id', string="Documents")
     stage_id = fields.Many2one('project.phase.template', ondelete='restrict', tracking=True, index=True, copy=False,domain="[('id', 'in', project_phase_ids)]")
     project_task_ids = fields.One2many('project.task', 'project_id')
+
     @api.depends()
     def _compute_notes_count(self):
         for project in self:
@@ -56,7 +59,7 @@ class ProjectProject(models.Model):
     def create(self,vals):
         rtn = super(ProjectProject,self).create(vals)
         stage_obj = self.env['project.task.type']
-        stage_ids = stage_obj.search([('set_default','=',True)])
+        stage_ids = stage_obj.search([('set_default', '=', True)])
 
         project_ids = [x.id for x in rtn]
         for stage in stage_ids:
@@ -73,13 +76,42 @@ class ProjectProject(models.Model):
             "res_model": "project.phase.wiz",
             "target": "new",
         }
+    
+    def generate_proforma_invoice(self):
+        completed_phases = self.project_task_ids.filtered(lambda l: l.final_stage == True and l.proforma_generated != 'yes')
+        return {
+            "name": _("Pro-Forma Invoice"),
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": "proforma.invoice",
+            "target": "new",
+            'context': {'default_sale_order_id': self.sale_order_id.id, 'default_project_id': self.id,
+                        'default_sale_order_value': self.sale_order_id.amount_total, 'default_task_ids': completed_phases.ids,
+                        'default_sale_name': self.sale_order_id.name, 'default_partner_id': self.partner_id.id}
+        }
 
 
 class ProjectTaskType(models.Model):
     _inherit = 'project.task.type'
 
     set_default = fields.Boolean('Default?')
+    final_stage = fields.Boolean(string="Is Final Stage")
 
+    @api.model
+    def create(self, vals):
+        if vals.get('final_stage'):
+            stages = self.search([('final_stage', '=', vals['final_stage'])])
+            if len(stages) > 0:
+                raise ValidationError("You cannot assign final stage to multiple task stages")
+        return super(ProjectTaskType, self).create(vals)
+
+    def write(self, vals):
+        if vals.get('final_stage'):
+            stages = self.search([('final_stage', '=', vals['final_stage'])])
+            if len(stages) > 0:
+                raise ValidationError("You cannot assign final stage to multiple task stages")
+        return super(ProjectTaskType, self).write(vals)
 
 
 class ProjectPhases(models.TransientModel):

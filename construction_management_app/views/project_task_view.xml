@@ -94,7 +94,8 @@
                     <field name="phase_id"/>
                     <field name="start_date"/>
                     <field name="date_end"/>
-                    <field name="stage"/>
+                    <field name="stage" invisible="1"/>
+                    <field name="proforma_generated"/>
                 </field>
                 <xpath expr="//form/sheet/div[@name='button_box']" position="inside">
                     <button class="oe_stat_button" type="object" icon="fa-tasks" name="view_notes">
@@ -111,6 +112,7 @@
             <field name="arch" type="xml">
                 <field name="fold" position="after">
                     <field name="set_default"/>
+                    <field name="final_stage"/>
                 </field>
             </field>
         </record>
@@ -153,21 +155,6 @@
                 </form>
             </field>
         </record>
-
-        <record id="view_sale_order_form_inherit" model="ir.ui.view">
-            <field name="name">sale.order.form.inherit</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='action_quotation_send']" position="after">
-                    <button name="action_send_proforma_invoice" type="object" string="Send Proforma Invoice"/>
-                </xpath>
-                <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="company_id"/>
-                </xpath>
-            </field>
-        </record>
-
 
     </data>
 </odoo>

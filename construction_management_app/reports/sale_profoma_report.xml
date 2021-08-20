@@ -1,72 +1,146 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="report_proforma_invoice_template">
+    <template id="proforma_invoice_report_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <div class="page">
-                    <div class="company_address" align="centre" >
-                        <div>
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="float-left" alt="Logo" style="height:100px; width:100px;"/>
-                            <strong t-field="o.company_id.partner_id.name" style="margin-left:250px; font-size:25px;"/>
-                        </div>
-                        <span t-field="o.company_id.partner_id.street" style="margin-left:350px; font-size:20px;"/>,
-                        <span t-field="o.company_id.partner_id.street2" style="font-size:20px;"/>,
-                        <span t-field="o.company_id.partner_id.city" style="font-size:20px;"/><br/>
-                        <span t-field="o.company_id.partner_id.state_id.name" style="margin-left:350px; font-size:20px;"/>,
-                        <span t-field="o.company_id.partner_id.country_id.name" style="font-size:20px;"/><br/>
-                        <span t-field="o.company_id.partner_id.phone" style="font-size:20px;margin-left:350px;"/>
-                    </div>
+                    <table class="header">
+                        <tr>
+                            <td style="width:40%;">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="padding: 0; margin-top:60px;height:80px;width:100px;" alt="Company Logo"/>
+                            </td>
+                            <td style="width:20%;"></td>
+                            <td style="width:40%;font-size:18px;">
+                                <div>
+                                    <span t-field="o.company_id.name"/>
+                                    <t t-if="o.company_id.street">
+                                        <br/><span t-field="o.company_id.street"/><br/>
+                                    </t>
+                                    <t t-if="o.company_id.street2">
+                                        <span t-field="o.company_id.street2"/>,
+                                    </t>
+                                    <t t-if="o.company_id.city">
+                                        <span t-field="o.company_id.city"/>,
+                                    </t>
+                                    <span t-if="o.company_id.state_id" t-field="o.company_id.state_id"/>
+                                    <span t-if="o.company_id.country_id" t-field="o.company_id.country_id.name"/>
+                                    <br/>
+                                    <span t-if="o.company_id.phone">
+                                        <i class="fa fa-phone"/>
+                                        <span t-field="o.company_id.phone"/>
+                                    </span><br/>
+
+                                    <span>
+                                        <div t-if="o.company_id.email">
+                                            <i class="fa fa-envelope"/>
+                                            <span t-field="o.company_id.email"/>
+                                        </div>
+                                    </span>
+                                    <span>
+                                        <div t-if="o.company_id.website">
+                                            <i class="fa fa-globe"/>
+                                            <span t-field="o.company_id.website"/>
+                                        </div>
+                                    </span>
+                                    <br/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
                     <h1 style="text-align:center;">PRO-FORMA INVOICE</h1>
 
-                    <table style="width:100%;border:1px solid black;padding:20px 20px;">
+                    <table style="width:100%;border:1px solid black;padding:20px 20px;font-size:16px;">
                         <tr>
-                            <td>Customer Name &amp; Address</td>
+                            <td>Customer Name &amp; Address:</td>
                             <td style="width:25%;"></td>
-                            <td>Invoice No.</td>
-                            <td style="width:25%;"></td>
+                            <td>Invoice No:</td>
+                            <td style="width:25%;"><span t-field="o.name"/> </td>
 
                         </tr>
                         <tr>
                             <td><strong><span t-field="o.partner_id.name"/></strong><br/>
-                                <span t-field="o.partner_id.street"/>, <span t-field="o.partner_id.street2"/><br/>
+                                <span t-field="o.partner_id.street" />, <span t-field="o.partner_id.street2"/><br/>
                                 <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.zip"/><br/>
                                 Ph:<span t-field="o.partner_id.phone"/>
                             </td>
                             <td style="width:25%;"></td>
-                            <td> <span>Date:</span> </td>
                             <td style="width:25%;"></td>
+                            <td style="width:25%;"></td>
+
+                        </tr>
+                        <br/>
+                        <tr>
+                            <td>Job Card No:</td>
+                            <td style="width:25%;"><span t-field="o.project_id.job_order"/> </td>
+                            <td>Date:</td>
+                            <td style="width:25%;"><span t-esc="time.strftime('%d-%m-%Y')"/> </td>
+
+                        </tr>
+                        <br/>
+
+                        <tr>
+                            <td>Place Of Supply:</td>
+                            <td style="width:25%;"><span t-field="o.project_id.name"/> </td>
+                            <td></td>
+                            <td></td>
 
                         </tr>
                     </table>
                     <br/>
-                    <table style="border:1px solid black; width:100%;">
-                        <tr style="border:1px solid black;">
-                            <th style="text-align:left;">Sr No.</th>
-                            <th style="text-align:left;">Product</th>
-                            <th style="text-align:left;">Description</th>
-                            <th style="text-align:left;">Qty<br/> S\M</th>
-                            <th style="text-align:left;">Rate<br/> Dhs</th>
-                            <th style="text-align:left;">Amount<br/> Dhs</th>
+                    <table style="border: 1px solid black;border-collapse: collapse; width:100%;font-size:16px;">
+                        <tr>
+                            <th style="width:50%;border: 1px solid black;">Description</th>
+                            <th style="width:50%;border: 1px solid black;">Amount</th>
                         </tr>
-                        <t t-set="sl" t-value="0"/>
-                        <t t-set="qt" t-value="0"/>
-                        <tr t-foreach="o.order_line" t-as="order" style="border:1px solid black;">
-                            <t t-set="sl" t-value="sl+1"/>
-                            <td><span t-esc="sl"/></td>
-                            <t t-set="qt" t-value="order.product_uom_qty-order.qty_delivered"/>
-                            <t t-if="qt > 0">
-                                <td><span t-esc="order.product_id.name"/> </td>
-                                <td><span t-esc="order.name"/> </td>
-                                <td><span t-esc="qt"/> </td>
-                                <td><span t-esc="order.price_unit"/> </td>
-                                <td><span t-esc="order.price_unit*qt"/> </td>
-                            </t>
+                    </table>
+                    <table style="border: 1px solid black;height:250px;border-collapse: collapse; width:100%;font-size:16px;">
+                        <tr>
+                            <td style="width:50%;border: 1px solid black;text-align:center;padding-top:10px;"><span t-field="o.description"/> </td>
+                            <td style="width:50%;border: 1px solid black;text-align:center;padding-top:10px;"><span t-field="o.final_amount"/> </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+
+
+                    <table style="width:100%;font-size:18px;">
+                        <tr>
+                            <td style="text-align:right;"><strong>Tax Excluded</strong></td>
+                            <td style="text-align:right;">
+                                <span t-field="o.tax_excluded"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;"><strong>Taxes</strong></td>
+                            <td style="text-align:right;">
+                                <span t-field="o.tax_amount" />
+                            </td>
 
                         </tr>
-
-
+                        <tr>
+                            <td style="text-align:right;"><strong>Final Amount</strong></td>
+                            <td style="text-align:right;">
+                                <span t-field="o.tax_included" />
+                            </td>
+                        </tr>
 
                     </table>
+
+                    <div style="position:fixed;top:1050px;width:100%;display:block;margin:0 auto;margin-left:-8px;">
+                        <strong>TERMS &amp; Conditions</strong><br/>
+                        <span style="padding:60px 60px;">1.Company accepts no responsibility for money paid against this invoice unless evidenced by official receipt of the Company</span><br/>
+                        <span style="padding:60px 60px;">2.This Invoice amount to be paid in full due to submission to FTA</span>
+                        <br/>
+                        <br/>
+                        <table style="width:100%;">
+                            <tr style="width:100%;">
+                                <td style="width:50%;margin-left:50px;"><strong> Customer's Signature</strong></td>
+                                <td style="width:50%;text-align:right;"><strong> For  <span t-field="o.company_id.name"/></strong></td>
+                            </tr>
+                        </table>
+
+                    </div>
                 </div>
             </t>
         </t>
@@ -80,21 +154,21 @@
         <field name="page_height">0</field>
         <field name="page_width">0</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">4</field>
-        <field name="margin_bottom">4</field>
-        <field name="margin_left">4</field>
-        <field name="margin_right">4</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">0</field>
+        <field name="header_spacing">50</field>
         <field name="dpi">90</field>
     </record>
 
     <report
             string="Proforma Invoice"
-            id="action_report_proforma_invoice"
-            model="sale.order"
-            name="construction_management_app.report_proforma_invoice_template"
-            file="construction_management_app.report_proforma_invoice_template"
+            id="action_proforma_invoice_report"
+            model="proforma.invoice"
+            name="construction_management_app.proforma_invoice_report_template"
+            file="construction_management_app.proforma_invoice_report_template"
             report_type="qweb-pdf"
             paperformat="construction_management_app.proforma_paper_format"/>
 
