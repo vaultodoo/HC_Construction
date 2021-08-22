@@ -52,14 +52,14 @@
 
                     <table style="width:100%;border:1px solid black;padding:20px 20px;font-size:16px;">
                         <tr>
-                            <td>Customer Name &amp; Address:</td>
+                            <td><b>Customer Name &amp; Address:</b></td>
                             <td style="width:25%;"></td>
-                            <td>Invoice No:</td>
+                            <td><b>Invoice No:</b></td>
                             <td style="width:25%;"><span t-field="o.name"/> </td>
 
                         </tr>
                         <tr>
-                            <td><strong><span t-field="o.partner_id.name"/></strong><br/>
+                            <td><strong><i><span t-field="o.partner_id.name"/></i></strong><br/>
                                 <span t-field="o.partner_id.street" />, <span t-field="o.partner_id.street2"/><br/>
                                 <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.zip"/><br/>
                                 Ph:<span t-field="o.partner_id.phone"/>
@@ -71,16 +71,16 @@
                         </tr>
                         <br/>
                         <tr>
-                            <td>Job Card No:</td>
+                            <td><b>Job Card No:</b></td>
                             <td style="width:25%;"><span t-field="o.project_id.job_order"/> </td>
-                            <td>Date:</td>
+                            <td><b>Date:</b></td>
                             <td style="width:25%;"><span t-esc="time.strftime('%d-%m-%Y')"/> </td>
 
                         </tr>
                         <br/>
 
                         <tr>
-                            <td>Place Of Supply:</td>
+                            <td><b>Place Of Supply:</b></td>
                             <td style="width:25%;"><span t-field="o.project_id.name"/> </td>
                             <td></td>
                             <td></td>
@@ -128,8 +128,9 @@
                     </table>
 
                     <div style="position:fixed;top:1050px;width:100%;display:block;margin:0 auto;margin-left:-8px;">
-                        <strong>TERMS &amp; Conditions</strong><br/>
-                        <span style="padding:60px 60px;">1.Company accepts no responsibility for money paid against this invoice unless evidenced by official receipt of the Company</span><br/>
+                        <strong><u>TERMS &amp; Conditions</u></strong><br/><br/>
+                        <span style="padding:60px 60px;">1.Company accepts no responsibility for money paid against this invoice unless evidenced by official receipt </span><br/>
+                        <span style="padding:65px 65px;">of the Company.</span><br/><br/>
                         <span style="padding:60px 60px;">2.This Invoice amount to be paid in full due to submission to FTA</span>
                         <br/>
                         <br/>
