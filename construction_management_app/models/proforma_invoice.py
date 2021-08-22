@@ -22,8 +22,7 @@ class ProforomaInvoice(models.Model):
     tax_amount = fields.Float(string="Tax Amount", compute='compute_tax_amount', store=True)
     tax_excluded = fields.Float(string="Tax Excluded", compute='compute_tax_amount', store=True)
     tax_included = fields.Float(string="Tax Included", compute='compute_tax_amount', store=True)
-
-
+    state = fields.Selection([('new', 'New'), ('paid', 'Paid')], string="Status", default='new')
 
     @api.model
     def create(self, vals):
@@ -60,6 +59,42 @@ class ProforomaInvoice(models.Model):
             rec.tax_amount = sum(t.get('amount', 0.0) for t in taxes.get('taxes', []))
             rec.tax_included = taxes['total_included']
             rec.tax_excluded = taxes['total_excluded']
+
+    def mark_as_paid(self):
+        self.state = 'paid'
+
+    def proforma_mail_send(self):
+        template_id = self.env['ir.model.data'].get_object('construction_management_app', 'email_template_proforma_invoice')
+        lang = self.env.context.get('lang')
+        ctx = {
+            'default_model': 'proforma.invoice',
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template_id),
+            'default_template_id': template_id.id,
+            'default_partner_ids': [(4,self.partner_id.id)],
+            'default_composition_mode': 'comment',
+            'mark_so_as_sent': True,
+            'force_email': True,
+        }
+
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(False,'form')],
+            'view_id': False,
+            'target': 'new',
+            'context': ctx,
+
+        }
+
+    def send_unpaid_proforma_email(self):
+        unpaid_proforma = self.search([('state','=','new')])
+        for up in unpaid_proforma:
+            template_id = self.env['ir.model.data'].get_object('construction_management_app', 'email_template_proforma_invoice')
+            mail_id = self.env['mail.template'].browse(template_id.id).send_mail(up.id, force_send=True)
+
+
 
                 
 

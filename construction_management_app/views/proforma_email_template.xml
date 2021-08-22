@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_proforma_invoice" model="mail.template">
+        <field name="name">Proforma Invoice: Send by email</field>
+        <field name="model_id" ref="construction_management_app.model_proforma_invoice"/>
+        <field name="subject">${object.company_id.name} (Ref ${object.name or 'n/a' })</field>
+        <field name="email_from">${(object.company_id.email or '')}</field>
+        <field name="partner_to">${object.partner_id.id}</field>
+        <field name="body_html"><![CDATA[
+            <p>Hello,</p><br/>
+            <p>Your Proforma invoice for <strong>${object.name}</strong> amounting in <strong>${format_amount(object.tax_included, object.company_id.currency_id)}</strong> is available.</p>
+            <br/>
+            <p> Do not hesitate to contact us if you have any questions.</p>
+]]>
+        </field>
+        <field name="report_template" ref="action_proforma_invoice_report"/>
+        <field name="report_name">${(object.name or '').replace('/','_')}</field>
+        <field name="lang">${object.partner_id.lang}</field>
+        <field name="user_signature" eval="False"/>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+</odoo>

@@ -108,6 +108,7 @@ Bill of Quantity construction
              'views/project_phase_template.xml',
             'views/proforma_invoice.xml',
             'reports/sale_profoma_report.xml',
+        'views/proforma_email_template.xml',
             'data/sequence.xml',
         ],
     'installable': True,
