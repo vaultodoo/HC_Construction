@@ -37,7 +37,9 @@ class MaterialPlanning(models.Model):
         'project.task',
         'Material Plan Task'
     )
-    
+    material_project_id = fields.Many2one('project.project', 'Project')
+    project_id = fields.Many2one('project.project', 'Project')
+
     @api.onchange('product_id')
     def compute_qty_on_hand(self):
         for rec in self:
@@ -48,6 +50,24 @@ class MaterialPlanning(models.Model):
     def compute_qty_to_purchase(self):
         if self.product_uom_qty > self.total_qty:
             self.qty_to_purchase = self.product_uom_qty - self.total_qty
+
+
+class LabourPlanning(models.Model):
+    _name = 'labour.plan'
+
+    labour_no = fields.Integer(string="No.of Labours")
+    no_days = fields.Float(string="No. of Days")
+    task_id = fields.Many2one('project.task')
+    project_id = fields.Many2one('project.project')
+    planned_hours = fields.Float(string="Planned Hours", compute='compute_planned_hours', store=True)
+    working_hours = fields.Float(string="Working Hours")
+
+    @api.depends('labour_no', 'no_days', 'working_hours')
+    def compute_planned_hours(self):
+        for rec in self:
+            rec.planned_hours = rec.labour_no * rec.no_days * rec.working_hours
+            if rec.task_id:
+                rec.task_id.planned_hours = rec.planned_hours
 
 
 class ConsumedMaterial(models.Model):

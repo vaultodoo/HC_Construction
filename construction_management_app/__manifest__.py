@@ -85,7 +85,8 @@ Bill of Quantity construction
                 'hr_timesheet',
                 'note',
                 'material_purchase_requisitions',
-                'project_task_material_requisition'
+                'project_task_material_requisition',
+                'sale_timesheet'
                 ],
     'data': [
              'security/construction_security.xml',

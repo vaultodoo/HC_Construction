@@ -39,8 +39,14 @@ class ProjectProject(models.Model):
     job_order = fields.Char(string="Job Order")
     plot_no = fields.Char(string="Plot No")
     document_ids = fields.One2many('upload.documents', 'project_id', string="Documents")
-    stage_id = fields.Many2one('project.phase.template', ondelete='restrict', tracking=True, index=True, copy=False,domain="[('id', 'in', project_phase_ids)]")
+    stage_id = fields.Many2one('project.phase.template', ondelete='restrict', tracking=True, index=True, copy=False, domain="[('id', 'in', project_phase_ids)]")
     project_task_ids = fields.One2many('project.task', 'project_id')
+    project_material_plan_ids = fields.One2many(
+        'material.plan',
+        'material_project_id',
+        'Material Plannings'
+    )
+    project_labour_plan_ids = fields.One2many('labour.plan','project_id', 'Labour Plannings')
 
     @api.depends()
     def _compute_notes_count(self):
@@ -90,6 +96,17 @@ class ProjectProject(models.Model):
                         'default_sale_order_value': self.sale_order_id.amount_total, 'default_task_ids': completed_phases.ids,
                         'default_sale_name': self.sale_order_id.name, 'default_partner_id': self.partner_id.id}
         }
+
+    def action_view_sale_order(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "sale.order",
+            "views": [[False, "form"]],
+            "res_id": self.sale_order_id.id,
+            "context": {"create": False, "show_sale": True},
+        }
+
 
 
 class ProjectTaskType(models.Model):
