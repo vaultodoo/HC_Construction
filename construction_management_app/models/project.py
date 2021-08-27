@@ -32,6 +32,22 @@ class ProjectProject(models.Model):
         string="Notes",
         store=True,
     )
+    source_location_id = fields.Many2one(
+        'stock.location',
+        string='Source Location',
+        copy=True,
+    )
+    dest_location_id = fields.Many2one(
+        'stock.location',
+        string='Destination Location',
+        required=False,
+        copy=True,
+    )
+    custom_picking_type_id = fields.Many2one(
+        'stock.picking.type',
+        string='Picking Type',
+        copy=False,
+    )
 
     project_phase_ids = fields.Many2many('project.phase.template', string="Project Phases")
     stage_allocated = fields.Boolean()
@@ -46,7 +62,14 @@ class ProjectProject(models.Model):
         'material_project_id',
         'Material Plannings'
     )
-    project_labour_plan_ids = fields.One2many('labour.plan','project_id', 'Labour Plannings')
+    project_labour_plan_ids = fields.One2many('labour.plan', 'project_id', 'Labour Plannings')
+    contract_date = fields.Date(string="PO/Contract Date")
+
+    @api.onchange('contract_date', 'job_order')
+    def get_sale_order_details(self):
+        if self.sale_order_id:
+            self.sale_order_id.contract_date = self.contract_date
+            self.sale_order_id.job_order = self.job_order
 
     @api.depends()
     def _compute_notes_count(self):
@@ -85,17 +108,20 @@ class ProjectProject(models.Model):
     
     def generate_proforma_invoice(self):
         completed_phases = self.project_task_ids.filtered(lambda l: l.final_stage == True and l.proforma_generated != 'yes')
-        return {
-            "name": _("Pro-Forma Invoice"),
-            "type": "ir.actions.act_window",
-            "view_type": "form",
-            "view_mode": "form",
-            "res_model": "proforma.invoice",
-            "target": "new",
-            'context': {'default_sale_order_id': self.sale_order_id.id, 'default_project_id': self.id,
-                        'default_sale_order_value': self.sale_order_id.amount_total, 'default_task_ids': completed_phases.ids,
-                        'default_sale_name': self.sale_order_id.name, 'default_partner_id': self.partner_id.id}
-        }
+        if not completed_phases:
+            raise ValidationError("There is No completed phase for invoicing")
+        else:
+            return {
+                "name": _("Pro-Forma Invoice"),
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": "proforma.invoice",
+                "target": "new",
+                'context': {'default_sale_order_id': self.sale_order_id.id, 'default_project_id': self.id,
+                            'default_sale_order_value': self.sale_order_id.amount_total, 'default_task_ids': completed_phases.ids,
+                            'default_sale_name': self.sale_order_id.name, 'default_partner_id': self.partner_id.id}
+            }
 
     def action_view_sale_order(self):
         self.ensure_one()
@@ -106,6 +132,37 @@ class ProjectProject(models.Model):
             "res_id": self.sale_order_id.id,
             "context": {"create": False, "show_sale": True},
         }
+
+    def generate_transfer(self):
+        if self.project_material_plan_ids:
+            transfer_lines = self.project_material_plan_ids.filtered(lambda l: l.transfer_generated != 'yes').mapped('material_task_id')
+            for task in transfer_lines:
+                transfers = self.project_material_plan_ids.filtered(lambda l: l.transfer_generated != 'yes' and l.material_task_id.id == task.id)
+                values = {
+                    'custom_project_id':self.id,
+                    'custom_task_id':task.id,
+                    'requisition_line_ids': [(0,0,{
+                        'requisition_type':'internal',
+                        'product_id':t.product_id.id,
+                        'description':t.description,
+                        'qty':t.product_uom_qty,
+                        'uom':t.product_uom.id
+                    }) for t in transfers],
+                    'location_id': self.source_location_id.id,
+                    'dest_location_id': self.dest_location_id.id,
+                    'custom_picking_type_id': self.custom_picking_type_id.id
+
+                }
+
+                requisition = self.env['material.purchase.requisition'].create(values)
+                requisition.request_stock()
+                picikng = self.env['stock.picking'].search([('custom_requisition_id','=',requisition.id),('state','=','draft')])
+                picikng.action_confirm()
+                picikng.action_assign()
+                picikng.sudo().button_validate()
+
+                for tt in transfers:
+                    tt.transfer_generated = 'yes'
 
 
 
@@ -167,8 +224,46 @@ class UploadDocuments(models.Model):
     
     def get_phases(self):
         if self.project_id:
-            self.phase_ids = [(4,i)for i in self.project_id.project_phase_ids.ids]
+            self.phase_ids = [(4, i)for i in self.project_id.project_phase_ids.ids]
 
-    
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+    project_name = fields.Char(string="Project Name")
+    job_order = fields.Char(string="Job Order")
+    contract_date = fields.Date(string="PO/Contract Date")
+
+    def action_open_sale_project(self):
+        action = {
+            'type': 'ir.actions.act_window',
+            'views': [(False, 'form')],
+            'view_mode': 'form',
+            'name': _('Projects'),
+            'res_model': 'project.project',
+            "res_id": self.project_ids.id,
+            "context": {"create": False,"show_sale": True},
+        }
+        return action
+
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    def _timesheet_create_project_prepare_values(self):
+        """Generate project values"""
+        account = self.order_id.analytic_account_id
+        if not account:
+            self.order_id._create_analytic_account(prefix=self.product_id.default_code or None)
+            account = self.order_id.analytic_account_id
+
+        return {
+            'name': '%s - %s' % (self.order_id.project_name, self.order_id.name) if self.order_id.project_name else self.order_id.name,
+            'analytic_account_id': account.id,
+            'partner_id': self.order_id.partner_id.id,
+            'sale_line_id': self.id,
+            'sale_order_id': self.order_id.id,
+            'active': True,
+            'company_id': self.company_id.id,
+        }
 
 

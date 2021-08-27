@@ -30,8 +30,9 @@
                                         <field name="description"/>
                                         <field name="total_qty" readonly="1" force_save="1"/>
                                         <field name="product_uom_qty"/>
-                                        <field name="qty_to_purchase" readonly="1" force_save="1"/>
                                         <field name="product_uom"/>
+                                        <field name="unit_price"/>
+                                        <field name="total_cost"/>
                                     </tree>
                                 </field>
                             </page>
@@ -155,6 +156,18 @@
                 </form>
             </field>
         </record>
+
+        <record id="view_task_kanban_inherit" model="ir.ui.view">
+            <field name="name">project.task.kanban</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//templates/t/div/div[1]/div[1]/div[1]/t/span/field[@name='partner_id']" position="replace">
+                    <strong><field name="project_id"/> </strong>
+                </xpath>
+            </field>
+        </record>
+
 
     </data>
 </odoo>

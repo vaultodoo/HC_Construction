@@ -37,8 +37,11 @@ class MaterialPlanning(models.Model):
         'project.task',
         'Material Plan Task'
     )
+    unit_price = fields.Float(related='product_id.list_price', store=True, string="Price", readonly=False)
+    total_cost = fields.Float(compute='compute_total_cost', store=True)
     material_project_id = fields.Many2one('project.project', 'Project')
     project_id = fields.Many2one('project.project', 'Project')
+    transfer_generated = fields.Selection([('yes', 'Yes'), ('no', 'No')], string="Transfer Generated", default='no')
 
     @api.onchange('product_id')
     def compute_qty_on_hand(self):
@@ -50,6 +53,13 @@ class MaterialPlanning(models.Model):
     def compute_qty_to_purchase(self):
         if self.product_uom_qty > self.total_qty:
             self.qty_to_purchase = self.product_uom_qty - self.total_qty
+    
+    @api.depends('product_uom_qty', 'unit_price')
+    def compute_total_cost(self):
+        for rec in self:
+            if rec.product_uom_qty and rec.unit_price:
+                rec.total_cost = rec.product_uom_qty * rec.unit_price
+
 
 
 class LabourPlanning(models.Model):
@@ -61,6 +71,8 @@ class LabourPlanning(models.Model):
     project_id = fields.Many2one('project.project')
     planned_hours = fields.Float(string="Planned Hours", compute='compute_planned_hours', store=True)
     working_hours = fields.Float(string="Working Hours")
+    unit_price = fields.Float(string="Price")
+    total_cost = fields.Float(compute='compute_total_cost', store=True)
 
     @api.depends('labour_no', 'no_days', 'working_hours')
     def compute_planned_hours(self):
@@ -68,6 +80,12 @@ class LabourPlanning(models.Model):
             rec.planned_hours = rec.labour_no * rec.no_days * rec.working_hours
             if rec.task_id:
                 rec.task_id.planned_hours = rec.planned_hours
+
+    @api.depends('planned_hours', 'unit_price')
+    def compute_total_cost(self):
+        for rec in self:
+            rec.total_cost = rec.planned_hours * rec.unit_price
+
 
 
 class ConsumedMaterial(models.Model):
@@ -245,6 +263,8 @@ class ProjectTask(models.Model):
             'context': {'default_return_product_ids': moves, 'default_move_ids': self.move_ids.ids, 'default_task_id': self.id}
         }
 
+
+
     def compute_consumed_materials(self):
         if self.move_ids or self.return_mov_ids:
             for moves in self.move_ids:
@@ -261,6 +281,16 @@ class ProjectTask(models.Model):
                                                                 'product_uom_qty': moves.product_uom_qty,
                                                                 'product_uom': moves.product_uom.id,
                                                                 })]
+
+    @api.onchange('stage_id')
+    def get_project_stage(self):
+        if self.final_stage:
+            if self.project_id:
+                seq = self.project_id.stage_id.sequence
+                stages = self.project_id.project_phase_ids.filtered(lambda l:l.sequence == seq+1)
+                if stages:
+                    self.project_id.stage_id = stages.id
+
 
 class StockMove(models.Model):
     _inherit = 'stock.move'

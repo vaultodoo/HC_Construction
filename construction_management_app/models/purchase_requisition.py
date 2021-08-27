@@ -32,6 +32,12 @@ class MaterialPurchaseRequisition(models.Model):
         string='Subcontract Cost',
         store=True,
     )
+    department_id = fields.Many2one(
+        'hr.department',
+        string='Department',
+        required=False,
+        copy=True,
+    )
             
 
     @api.depends('requisition_line_ids',
