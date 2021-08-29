@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="customer_survey_form_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <header>
+                    <t t-if="o.company_id.certificate_header">
+                        <img style="width:100%;z-index:800;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                    </t>
+                </header>
+
+                <div class="page" style="text-align:center;">
+                    <!--                    <div style="width:100%;left:0px;top:0px;">-->
+                    <!--                        <t t-if="o.company_id.certificate_header">-->
+                    <!--                            <img style="width:100%;z-index:800;" t-att-src="'data:image/png;base64,%s'%to_text(o.company_id.certificate_header)"/>-->
+                    <!--                        </t>-->
+                    <!--                    </div>-->
+
+                    <h1 style="text-align:center;"><u>CUSTOMER SATISFACTION SURVEY FORM</u></h1>
+                    <br/>
+                    <table style="width:100%;border: 1px solid black;font-size:18px;">
+                        <thead style="width:100%;border: 1px solid black;">
+                            <tr style="border: 1px solid black;">
+                                <th style="border: 1px solid black;width:10%;">Sl No.</th>
+                                <th style="border: 1px solid black;width:30%;">Survey Detail</th>
+                                <th style="border: 1px solid black;width:12%;">Very <br/>Satisfied(5)</th>
+                                <th style="border: 1px solid black;width:12%;">Satisfied<br/>(4)</th>
+                                <th style="border: 1px solid black;width:12%;">Average<br/> Satisfied(3)</th>
+                                <th style="border: 1px solid black;width:12%;">Dis-<br/>Satisfied(2)</th>
+                                <th style="border: 1px solid black;width:12%;">Very Dis-<br/>Satisfied(1)</th>
+                            </tr>
+                        </thead>
+                        <tbody style="width:100%;border: 1px solid black;">
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black; text-align:center;">1</td>
+                                <td style="border: 1px solid black;">Quality of Product</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">2</td>
+                                <td style="border: 1px solid black;">Punctuality in supplies</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">3</td>
+                                <td style="border: 1px solid black;">Management Services</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">4</td>
+                                <td style="border: 1px solid black;">Sales Services</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">5</td>
+                                <td style="border: 1px solid black;">Accounts Services</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">6</td>
+                                <td style="border: 1px solid black;">Response to customer complaints</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">7</td>
+                                <td style="border: 1px solid black;">General attitude of staff</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">8</td>
+                                <td style="border: 1px solid black;">Overall Satisfaction</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr style="border: 1px solid black;">
+                                <td style="border: 1px solid black;text-align:center;">9</td>
+                                <td style="border: 1px solid black;">How does company services and products compared to other competitors</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <br/>
+                    <div style="width:100%;text-align:left;font-size:18px;"><strong>Comments:</strong><br/>
+                        <span>.............................................................................................................................</span>
+                    </div>
+                    <br/>
+                    <div style="width:100%;text-align:left;font-size:18px;">
+                        <span>Company:</span> <strong><span t-esc="o.partner_id.name"/></strong>
+                    </div>
+                    <br/>
+                    <div style="width:100%;text-align:left;font-size:18px;">
+                        <span>Job No:</span> <strong><span t-esc="o.job_order"/></strong>
+                    </div>
+                    <br/>
+                    <div style="width:100%;text-align:left;font-size:18px;">
+                        <span>Project Detail:</span> <strong><span t-esc="o.name"/></strong>
+                    </div>
+                    <br/>
+                    <div style="width:100%;text-align:left;font-size:18px;">
+                        <span>Name &amp; Signature:</span> <span>...............................................................</span>
+                        <span style="float-right;">Date:</span> <span>......................................</span>
+
+                    </div>
+
+                </div>
+                <footer>
+                    <t t-if="o.company_id.certificate_footer">
+                        <img style="width:100%;z-index:800; " t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_footer)"/>
+                    </t>
+                </footer>
+
+            </t>
+        </t>
+
+    </template>
+
+    <report
+            string="Customer Survey Form"
+            id="action_customer_survey_form"
+            model="project.project"
+            name="construction_management_app.customer_survey_form_template"
+            file="construction_management_app.customer_survey_form_template"
+            report_type="qweb-pdf"
+            paperformat="construction_management_app.proforma_paper_format"/>
+
+
+</odoo>

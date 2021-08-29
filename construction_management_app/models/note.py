@@ -25,3 +25,10 @@ class Note(models.Model):
     is_project = fields.Boolean(
         'Is Project?',
     )
+
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    certificate_header = fields.Binary(string="Certificate Header")
+    certificate_footer = fields.Binary(string="Certificate Footer")
