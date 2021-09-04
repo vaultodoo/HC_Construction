@@ -69,6 +69,8 @@ class ProjectProject(models.Model):
     )
     project_labour_plan_ids = fields.One2many('labour.plan', 'project_id', 'Labour Plannings',tracking=True)
     contract_date = fields.Date(string="PO/Contract Date",tracking=True)
+    invoice_count = fields.Integer(related="sale_order_id.invoice_count", store=True)
+    proforma_count = fields.Integer(compute='compute_proforma_count')
 
     @api.onchange('contract_date', 'job_order')
     def get_sale_order_details(self):
@@ -138,6 +140,52 @@ class ProjectProject(models.Model):
             "res_id": self.sale_order_id.id,
             "context": {"create": False, "show_sale": True},
         }
+    def compute_proforma_count(self):
+        for rec in self:
+            rec.proforma_count = self.env['proforma.invoice'].search_count([('project_id', '=', self.id)])
+
+    def action_view_proforma(self):
+        proformas = self.env['proforma.invoice'].search([('project_id', '=', self.id)]).ids
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Proforma Invoices',
+            'view_mode': 'tree,form',
+            'res_model': 'proforma.invoice',
+            'domain': [('id', 'in', proformas)],
+        }
+    
+    def action_open_sale_invoices(self):
+        if self.sale_order_id:
+            invoices = self.sale_order_id.mapped('invoice_ids')
+            action = self.env.ref('account.action_move_out_invoice_type').read()[0]
+            if len(invoices) > 1:
+                action['domain'] = [('id','in',invoices.ids)]
+            elif len(invoices) == 1:
+                form_view = [(self.env.ref('account.view_move_form').id,'form')]
+                if 'views' in action:
+                    action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+                else:
+                    action['views'] = form_view
+                action['res_id'] = invoices.id
+            else:
+                action = {'type': 'ir.actions.act_window_close'}
+
+            context = {
+                'default_type': 'out_invoice',
+            }
+            if len(self.sale_order_id) == 1:
+                context.update({
+                    'default_partner_id': self.sale_order_id.partner_id.id,
+                    'default_partner_shipping_id': self.sale_order_id.partner_shipping_id.id,
+                    'default_invoice_payment_term_id': self.sale_order_id.payment_term_id.id or self.sale_order_id.partner_id.property_payment_term_id.id or
+                                                       self.env['account.move'].default_get(
+                                                           ['invoice_payment_term_id']).get('invoice_payment_term_id'),
+                    'default_invoice_origin': self.sale_order_id.mapped('name'),
+                    'default_user_id': self.sale_order_id.user_id.id,
+                })
+            action['context'] = context
+            return action
 
     def generate_transfer(self):
         if self.project_material_plan_ids:

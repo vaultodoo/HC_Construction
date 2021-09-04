@@ -75,6 +75,12 @@
                 </xpath>
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button type="object" name="action_view_sale_order" class="oe_stat_button" icon="fa-dollar" string="Sales Order"/>
+                    <button type="object" name="action_view_proforma" class="oe_stat_button" icon="fa-dollar">
+                        <field name="proforma_count" widget="statinfo" string="Proforma Invoices"/>
+                    </button>
+                    <button type="object" name="action_open_sale_invoices" class="oe_stat_button" icon="fa-dollar">
+                        <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                    </button>
                 </xpath>
                 <xpath expr="//header" position="inside">
                     <button name="allocate_stage_phase" type="object" string="Allocate Stages" class="oe_highlight" attrs="{'invisible':[('stage_allocated','=',True)]}"/>
