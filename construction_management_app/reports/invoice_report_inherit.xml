@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="report_invoice_document_inherit_construction">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <header>
+                    <t t-if="o.company_id.certificate_header">
+                        <img style="width:100%;z-index:600;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                    </t>
+                </header>
+                <div class="page">
+                    <h1 style="text-align:center;">TAX INVOICE</h1>
+                    <table style="width:100%;border:1px solid black;padding:20px 20px;font-size:16px;">
+                        <tr>
+                            <td><b>Customer Name &amp; Address:</b></td>
+                            <td style="width:25%;"></td>
+                            <td><b>Invoice No:</b></td>
+                            <td style="width:25%;"><span t-field="o.name"/> </td>
+
+                        </tr>
+                        <tr>
+                            <td><strong><i><span t-field="o.partner_id.name"/></i></strong><br/>
+                                <span t-field="o.partner_id.street" />, <span t-field="o.partner_id.street2"/><br/>
+                                <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.zip"/><br/>
+                                Ph:<span t-field="o.partner_id.phone"/>
+                            </td>
+                            <td style="width:25%;"></td>
+                            <td style="width:25%;"></td>
+                            <td style="width:25%;"></td>
+                        </tr>
+                        <br/>
+                        <tr>
+                            <td><b>Job Card No:</b></td>
+                            <td style="width:25%;"><span t-field="o.sale_order_id.job_order"/> </td>
+                            <td><b>Date:</b></td>
+                            <td style="width:25%;"><span t-esc="time.strftime('%d-%m-%Y')"/> </td>
+                        </tr>
+                        <br/>
+
+                        <tr>
+                            <td><b>Place Of Supply:</b></td>
+                            <td style="width:25%;"><span t-field="o.sale_order_id.project_name"/> </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <br/>
+
+                    <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+                    <table style="border: 1px solid black;border-collapse: collapse; width:100%;font-size:16px;">
+                        <thead>
+                            <tr>
+                                <th name="th_description" style="text-align:left;"><span>Description</span></th>
+                                <th name="th_quantity" style="text-align:left;"><span>Quantity</span></th>
+                                <th name="th_priceunit" style="text-align:left;"><span>Unit Price</span></th>
+                                <th name="th_taxes" style="text-align:left;"><span>Taxes</span></th>
+                                <th name="th_subtotal" style="text-align:left;">
+                                    <span>Amount</span>
+                                    <span>Total Price</span>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table style="border: 1px solid black;height:250px;border-collapse: collapse; width:100%;font-size:16px;">
+                        <tbody class="invoice_tbody">
+                            <t t-set="current_subtotal" t-value="0"/>
+                            <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+
+                            <tr t-foreach="lines" t-as="line">
+                                <t t-if="not line.display_type" name="account_invoice_line_accountable">
+                                    <td name="account_invoice_line_name"><span t-field="line.name" t-options="{'widget': 'text'}"/></td>
+                                    <td class="text-right">
+                                        <span t-field="line.quantity"/>
+                                        <span t-field="line.product_uom_id"  groups="uom.group_uom"/>
+                                    </td>
+                                    <td>
+                                        <span class="text-nowrap" t-field="line.price_unit"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))" id="line_tax_ids"/>
+                                    </td>
+                                    <td class="text-right o_price_total">
+                                        <span class="text-nowrap" t-field="line.price_subtotal"/>
+                                        <span class="text-nowrap" t-field="line.price_total"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table style="width:100%;font-size:18px;">
+                        <tr>
+                            <td style="text-align:right;"><strong>Tax Excluded</strong></td>
+                            <td style="text-align:right;">
+                                <span t-field="o.amount_untaxed"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;"><strong>Taxes</strong></td>
+                            <td style="text-align:right;">
+                                <span t-field="o.amount_tax" />
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;"><strong>Final Amount</strong></td>
+                            <td style="text-align:right;">
+                                <span t-field="o.amount_total" />
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <div style="position:fixed;top:1050px;width:100%;display:block;margin:0 auto;margin-left:-8px;">
+                        <strong><u>TERMS &amp; Conditions</u></strong><br/><br/>
+                        <span style="padding:60px 60px;">1.Company accepts no responsibility for money paid against this invoice unless evidenced by official receipt </span><br/>
+                        <span style="padding:65px 65px;">of the Company.</span><br/><br/>
+                        <span style="padding:60px 60px;">2.This Invoice amount to be paid in full due to submission to FTA</span>
+                        <br/>
+                        <br/>
+                        <table style="width:100%;">
+                            <tr style="width:100%;">
+                                <td style="width:50%;margin-left:50px;"><strong> Customer's Signature</strong></td>
+                                <td style="width:50%;text-align:right;"><strong> For  <span t-field="o.company_id.name"/></strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                </div>
+<!--                <footer style="border-top: 1px solid black;" class="footer o_standard_footer">-->
+<!--                    <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>-->
+<!--                        Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>-->
+<!--                </footer>-->
+
+            </t>
+        </t>
+
+    </template>
+
+    <report
+            id="account.account_invoices"
+            model="account.move"
+            string="Invoices"
+            report_type="qweb-pdf"
+            name="account.report_invoice_with_payments"
+            file="account.report_invoice_with_payments"
+            attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+            print_report_name="(object._get_report_base_filename())"
+            groups="account.group_account_invoice"
+            menu="False"
+    />
+    <report
+            id="account.account_invoices_without_payment"
+            model="account.move"
+            string="Invoices without Payment"
+            report_type="qweb-pdf"
+            name="account.report_invoice"
+            file="account.report_invoice"
+            attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+            print_report_name="(object._get_report_base_filename())"
+            menu="False"
+    />
+
+    <report
+            id="account_invoices_report_construction"
+            model="account.move"
+            string="Invoices"
+            report_type="qweb-pdf"
+            name="construction_management_app.report_invoice_document_inherit_construction"
+            file="construction_management_app.report_invoice_document_inherit_construction"
+            groups="account.group_account_invoice"
+            paperformat="construction_management_app.proforma_paper_format"
+    />
+
+
+
+
+
+
+</odoo>

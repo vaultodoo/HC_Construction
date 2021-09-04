@@ -145,13 +145,13 @@
                         <span style="float-right;">Date:</span> <span>......................................</span>
 
                     </div>
+                    <br/>
 
                 </div>
-                <footer>
-                    <t t-if="o.company_id.certificate_footer">
-                        <img style="width:100%;z-index:800; " t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_footer)"/>
-                    </t>
-                </footer>
+<!--                <footer style="border-top: 1px solid black;" class="footer o_standard_footer">-->
+<!--                    <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>-->
+<!--                        Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>-->
+<!--                </footer>-->
 
             </t>
         </t>

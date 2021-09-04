@@ -86,7 +86,8 @@ Bill of Quantity construction
                 'note',
                 'material_purchase_requisitions',
                 'project_task_material_requisition',
-                'sale_timesheet'
+                'sale_timesheet',
+                'sale'
                 ],
     'data': [
              'security/construction_security.xml',
@@ -111,6 +112,13 @@ Bill of Quantity construction
             'reports/sale_profoma_report.xml',
         'reports/customer_survey_form.xml',
         'views/proforma_email_template.xml',
+        'reports/water_proofing_completion_report.xml',
+        'wizard/water_proofing_completion.xml',
+        'reports/sub_contract_agreement_report.xml',
+        'wizard/sub_contract_agreement.xml',
+        'reports/water_proofing_guarantee_report.xml',
+        'wizard/water_proofing_guarantee.xml',
+        'reports/invoice_report_inherit.xml',
             'data/sequence.xml',
         ],
     'installable': True,

@@ -5,8 +5,9 @@ from odoo.exceptions import ValidationError
 
 
 class ProjectProject(models.Model):
-    _inherit = 'project.project'
-    
+    _name = 'project.project'
+    _inherit = ['project.project', 'mail.activity.mixin']
+
     type_of_construction = fields.Selection(
         [('agricultural', 'Agricultural'),
         ('residential', 'Residential'),
@@ -16,54 +17,58 @@ class ProjectProject(models.Model):
         ('heavy_civil','Heavy civil'),
         ('environmental','Environmental'),
         ('other','other')],
-        string='Types of Construction'
+        string='Types of Construction',  track_visibility='onchange'
+    )
+    construction_type = fields.Many2one(
+        'construction.type',
+        string='Types of Construction',track_visibility='onchange'
     )
     location_id = fields.Many2one(
         'res.partner',
-        'Location'
+        'Location',tracking=True
     )
     notes_ids = fields.One2many(
         'note.note', 
         'project_id', 
-        string='Notes',
+        string='Notes', tracking=True
     )
     notes_count = fields.Integer(
         compute='_compute_notes_count', 
         string="Notes",
-        store=True,
+        store=True,tracking=True
     )
     source_location_id = fields.Many2one(
         'stock.location',
         string='Source Location',
-        copy=True,
+        copy=True,tracking=True
     )
     dest_location_id = fields.Many2one(
         'stock.location',
         string='Destination Location',
         required=False,
-        copy=True,
+        copy=True,tracking=True
     )
     custom_picking_type_id = fields.Many2one(
         'stock.picking.type',
         string='Picking Type',
-        copy=False,
+        copy=False,tracking=True
     )
 
-    project_phase_ids = fields.Many2many('project.phase.template', string="Project Phases")
-    stage_allocated = fields.Boolean()
-    sales_person = fields.Many2one('res.users', string="Sales Person")
-    job_order = fields.Char(string="Job Order")
-    plot_no = fields.Char(string="Plot No")
-    document_ids = fields.One2many('upload.documents', 'project_id', string="Documents")
+    project_phase_ids = fields.Many2many('project.phase.template', string="Project Phases",tracking=True)
+    stage_allocated = fields.Boolean(tracking=True)
+    sales_person = fields.Many2one('res.users', string="Sales Person",tracking=True)
+    job_order = fields.Char(string="Job Order",tracking=True)
+    plot_no = fields.Char(string="Plot No",tracking=True)
+    document_ids = fields.One2many('upload.documents', 'project_id', string="Documents",tracking=True)
     stage_id = fields.Many2one('project.phase.template', ondelete='restrict', tracking=True, index=True, copy=False, domain="[('id', 'in', project_phase_ids)]")
-    project_task_ids = fields.One2many('project.task', 'project_id')
+    project_task_ids = fields.One2many('project.task', 'project_id',tracking=True)
     project_material_plan_ids = fields.One2many(
         'material.plan',
         'material_project_id',
-        'Material Plannings'
+        'Material Plannings',tracking=True
     )
-    project_labour_plan_ids = fields.One2many('labour.plan', 'project_id', 'Labour Plannings')
-    contract_date = fields.Date(string="PO/Contract Date")
+    project_labour_plan_ids = fields.One2many('labour.plan', 'project_id', 'Labour Plannings',tracking=True)
+    contract_date = fields.Date(string="PO/Contract Date",tracking=True)
 
     @api.onchange('contract_date', 'job_order')
     def get_sale_order_details(self):
@@ -120,7 +125,8 @@ class ProjectProject(models.Model):
                 "target": "new",
                 'context': {'default_sale_order_id': self.sale_order_id.id, 'default_project_id': self.id,
                             'default_sale_order_value': self.sale_order_id.amount_total, 'default_task_ids': completed_phases.ids,
-                            'default_sale_name': self.sale_order_id.name, 'default_partner_id': self.partner_id.id}
+                            'default_sale_name': self.sale_order_id.name, 'default_partner_id': self.partner_id.id,
+                            'default_amount_untaxed': self.sale_order_id.amount_untaxed, 'default_amount_tax': self.sale_order_id.amount_tax}
             }
 
     def action_view_sale_order(self):
@@ -163,7 +169,6 @@ class ProjectProject(models.Model):
 
                 for tt in transfers:
                     tt.transfer_generated = 'yes'
-
 
 
 class ProjectTaskType(models.Model):
@@ -233,6 +238,32 @@ class SaleOrder(models.Model):
     job_order = fields.Char(string="Job Order")
     contract_date = fields.Date(string="PO/Contract Date")
 
+    @api.model
+    def create(self,vals):
+        if vals.get('name',_('New')) == _('New'):
+            seq_date = None
+            initial = self.env['res.partner'].search([('id','=',vals.get('partner_id'))]).partner_initial
+            split_seq = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
+                'sale.order.seq',sequence_date=seq_date).split('/')[2]
+            initial_split_concat = initial + "-" + split_seq if initial else split_seq
+            split = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
+                'sale.order.seq', sequence_date=seq_date)[0:-5]
+            seq = split + initial_split_concat + "/" + str(fields.Date.today().year)
+            if 'date_order' in vals:
+                seq_date = fields.Datetime.context_timestamp(self,fields.Datetime.to_datetime(vals['date_order']))
+            vals['name'] = seq or _('New')
+
+        # Makes sure partner_invoice_id', 'partner_shipping_id' and 'pricelist_id' are defined
+        if any(f not in vals for f in ['partner_invoice_id','partner_shipping_id','pricelist_id']):
+            partner = self.env['res.partner'].browse(vals.get('partner_id'))
+            addr = partner.address_get(['delivery','invoice'])
+            vals['partner_invoice_id'] = vals.setdefault('partner_invoice_id',addr['invoice'])
+            vals['partner_shipping_id'] = vals.setdefault('partner_shipping_id',addr['delivery'])
+            vals['pricelist_id'] = vals.setdefault('pricelist_id',
+                                                   partner.property_product_pricelist and partner.property_product_pricelist.id)
+        result = super(SaleOrder,self).create(vals)
+        return result
+
     def action_open_sale_project(self):
         action = {
             'type': 'ir.actions.act_window',
@@ -244,6 +275,45 @@ class SaleOrder(models.Model):
             "context": {"create": False,"show_sale": True},
         }
         return action
+
+    def _prepare_invoice(self):
+        """
+        Prepare the dict of values to create the new invoice for a sales order. This method may be
+        overridden to implement custom invoice generation (making sure to call super() to establish
+        a clean extension chain).
+        """
+        self.ensure_one()
+        # ensure a correct context for the _get_default_journal method and company-dependent fields
+        self = self.with_context(default_company_id=self.company_id.id, force_company=self.company_id.id)
+        journal = self.env['account.move'].with_context(default_type='out_invoice')._get_default_journal()
+        if not journal:
+            raise UserError(_('Please define an accounting sales journal for the company %s (%s).') % (self.company_id.name, self.company_id.id))
+
+        invoice_vals = {
+            'ref': self.client_order_ref or '',
+            'type': 'out_invoice',
+            'narration': self.note,
+            'currency_id': self.pricelist_id.currency_id.id,
+            'campaign_id': self.campaign_id.id,
+            'medium_id': self.medium_id.id,
+            'source_id': self.source_id.id,
+            'invoice_user_id': self.user_id and self.user_id.id,
+            'team_id': self.team_id.id,
+            'partner_id': self.partner_invoice_id.id,
+            'partner_shipping_id': self.partner_shipping_id.id,
+            'invoice_partner_bank_id': self.company_id.partner_id.bank_ids[:1].id,
+            'fiscal_position_id': self.fiscal_position_id.id or self.partner_invoice_id.property_account_position_id.id,
+            'journal_id': journal.id,  # company comes from the journal
+            'invoice_origin': self.name,
+            'invoice_payment_term_id': self.payment_term_id.id,
+            'invoice_payment_ref': self.reference,
+            'transaction_ids': [(6, 0, self.transaction_ids.ids)],
+            'invoice_line_ids': [],
+            'company_id': self.company_id.id,
+            'sale_order_id':self.id
+        }
+        return invoice_vals
+
 
 
 class SaleOrderLine(models.Model):
@@ -265,5 +335,25 @@ class SaleOrderLine(models.Model):
             'active': True,
             'company_id': self.company_id.id,
         }
+
+
+class AccountMove(models.Model):
+    _inherit = 'account.move'
+
+    sale_order_id = fields.Many2one('sale.order')
+
+
+class ConstructionType(models.Model):
+    _name = 'construction.type'
+
+    name = fields.Char(required=1)
+    code = fields.Char(required=1)
+
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    partner_initial = fields.Char(string="Partner Initial")
+
 
 

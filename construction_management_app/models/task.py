@@ -37,7 +37,7 @@ class MaterialPlanning(models.Model):
         'project.task',
         'Material Plan Task'
     )
-    unit_price = fields.Float(related='product_id.list_price', store=True, string="Price", readonly=False)
+    unit_price = fields.Float(related='product_id.standard_price', store=True, string="Price", readonly=False)
     total_cost = fields.Float(compute='compute_total_cost', store=True)
     material_project_id = fields.Many2one('project.project', 'Project')
     project_id = fields.Many2one('project.project', 'Project')

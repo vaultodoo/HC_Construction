@@ -8,6 +8,8 @@ class ProforomaInvoice(models.Model):
     sale_order_id = fields.Many2one('sale.order')
     sale_name = fields.Char(string="Sale")
     sale_order_value = fields.Float(string="Sale Order Value")
+    amount_untaxed = fields.Float(string="Amount Untaxed")
+    amount_tax = fields.Float(string="Amount Tax")
     description = fields.Text(string="Description")
     project_id = fields.Many2one('project.project', string="Project")
     task_ids = fields.Many2many('project.task', string="Completed Phases")

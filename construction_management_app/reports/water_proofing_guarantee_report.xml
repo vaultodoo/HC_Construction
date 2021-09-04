@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="water_proofing_guarantee_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <header>
+                    <t t-if="o.company_id.certificate_header">
+                        <img style="width:100%;z-index:600;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                    </t>
+                </header>
+                <div class="page" style="text-align:center;">
+                    <h2 style="text-align:center;"><u><i>GUARANTEE FOR WATER PROOFING</i></u></h2><br/>
+                    <table style="width:100%;font-size:16px;">
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>NAME OF THE CLIENT</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.client"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>PROJECT</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
+                        </tr>
+
+
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>MAIN CONTRACTOR</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>CONSULTANT</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.consultant"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>SYSTEM APPLIED</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.project_id.type_of_construction"/> </strong></td>
+                        </tr>
+
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>GUARANTEE PERIOD</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.guarantee_period"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>COMMENCING</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.date"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%"><strong>EXPIRING</strong></td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.expiring"/> </strong></td>
+                        </tr>
+
+                    </table>
+                    <br/>
+                    <span>
+                        <span style="text-align:left;font-size:16px;" t-raw="o.nature_work"/>
+                    </span>
+                    <div style="width:100%;text-align:left;font-size:16px;"><strong><span>
+                        <i>For</i> <span t-esc="o.company_id.name"/>
+                    </span></strong>
+                    </div>
+                    <br/>
+                </div>
+<!--                <footer style="border-top: 1px solid black;" class="footer o_standard_footer">-->
+<!--                    <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>-->
+<!--                        Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>-->
+<!--                </footer>-->
+
+            </t>
+        </t>
+
+    </template>
+
+    <report
+            string="Water Proofing Guarantee"
+            id="action_water_proofing_guarantee_report"
+            model="water.proofing.guarantee"
+            name="construction_management_app.water_proofing_guarantee_report_template"
+            file="construction_management_app.water_proofing_guarantee_report_template"
+            report_type="qweb-pdf"
+            paperformat="construction_management_app.water_proofing_paper_format"/>
+
+
+</odoo>

@@ -8,4 +8,13 @@
         <field name="company_id" eval="False"/>
     </record>
 
+    <record id="sale_order_seq" model="ir.sequence">
+        <field name="name">Sales Order</field>
+        <field name="code">sale.order.seq</field>
+        <field name="prefix">AMI/QTN-%(month)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+
 </odoo>

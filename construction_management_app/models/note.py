@@ -32,3 +32,4 @@ class ResCompany(models.Model):
 
     certificate_header = fields.Binary(string="Certificate Header")
     certificate_footer = fields.Binary(string="Certificate Footer")
+    fax = fields.Char(string="Fax")

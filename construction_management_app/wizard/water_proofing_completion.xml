@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="water_proof_completion_form" model="ir.ui.view">
+        <field name="name">water.proof.completion.form</field>
+        <field name="model">water.proof.completion</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="attention"/>
+                        <field name="letter_body"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="print_report" type="object" string="Print" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Water Proofing Completion Form"
+                res_model="water.proof.completion"
+                binding_model="project.project"
+                view_mode="form"
+                binding_views="form"
+                target="new"
+                id="water_proofing_completion_action"
+    />
+
+</odoo>

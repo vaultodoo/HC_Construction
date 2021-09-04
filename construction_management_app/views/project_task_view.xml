@@ -31,8 +31,8 @@
                                         <field name="total_qty" readonly="1" force_save="1"/>
                                         <field name="product_uom_qty"/>
                                         <field name="product_uom"/>
-                                        <field name="unit_price"/>
-                                        <field name="total_cost"/>
+                                        <field name="unit_price" sum="Total Price" widget="monetary" optional="show"/>
+                                        <field name="total_cost" sum="Total Cost" widget="monetary" optional="show"/>
                                     </tree>
                                 </field>
                             </page>
