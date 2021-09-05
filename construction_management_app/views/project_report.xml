@@ -35,7 +35,7 @@
                                     <td><strong>Location</strong></td>
                                 </tr>
                                 <tr style="border: 2px solid black;">
-                                    <td><span t-field="doc.type_of_construction"/></td>
+                                    <td><span t-field="doc.construction_type.name"/></td>
                                     <td>
                                         <div name="invoice_address">
                                             <address t-field="doc.location_id"

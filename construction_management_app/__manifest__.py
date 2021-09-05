@@ -119,6 +119,8 @@ Bill of Quantity construction
         'reports/water_proofing_guarantee_report.xml',
         'wizard/water_proofing_guarantee.xml',
         'reports/invoice_report_inherit.xml',
+        'reports/material_supply_confirmation_report.xml',
+        'wizard/material_supply_confirmation.xml',
             'data/sequence.xml',
         ],
     'installable': True,

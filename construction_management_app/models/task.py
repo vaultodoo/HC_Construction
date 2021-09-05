@@ -219,6 +219,7 @@ class ProjectTask(models.Model):
     phase_id = fields.Many2one('project.phase.template', string="Project Phase")
     proforma_generated = fields.Selection([('yes', 'YES'), ('no', 'NO')], string='Proforma Generated', default='no')
     # @api.multi #odoo13
+
     def view_stock_moves(self):
         for rec in self:
             stock_move_list = []
@@ -244,11 +245,11 @@ class ProjectTask(models.Model):
         if self.move_ids:
             for rec in self.move_ids:
                 if not rec.is_returned:
-                    for line in rec.move_line_nosuggest_ids:
+                    for line in rec.move_line_nosuggest_ids | rec.move_line_ids:
                         pro_line = self.env['return.moves.products'].create({
                             'product_id': line.product_id.id,
                             'lot_id': line.lot_id.id,
-                            'total_qty': line.qty_done,
+                            'total_qty': line.product_qty if line.product_qty > 0.0 else line.qty_done,
                             'product_uom': line.product_uom_id.id,
                             'task_id': self.id,
                             'move_id': rec.id,
@@ -262,8 +263,6 @@ class ProjectTask(models.Model):
             'target': 'new',
             'context': {'default_return_product_ids': moves, 'default_move_ids': self.move_ids.ids, 'default_task_id': self.id}
         }
-
-
 
     def compute_consumed_materials(self):
         if self.move_ids or self.return_mov_ids:
@@ -301,7 +300,7 @@ class StockMove(models.Model):
     def return_product(self):
         for rec in self:
             moves = []
-            for line in rec.move_line_nosuggest_ids:
+            for line in rec.move_line_nosuggest_ids or rec.move_line_ids:
                 pro_line = self.env['return.moves.products'].create({
                     'product_id': line.product_id.id,
                     'lot_id': line.lot_id.id,

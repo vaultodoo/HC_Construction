@@ -5,11 +5,11 @@
             <t t-foreach="docs" t-as="o">
                 <header>
                     <t t-if="o.company_id.certificate_header">
-                        <img style="width:100%;z-index:600;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                        <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
                     </t>
                 </header>
                 <div class="page" style="text-align:center;">
-                    <h2 style="text-align:center;"><u><i>GUARANTEE FOR WATER PROOFING</i></u></h2><br/>
+                    <h2 style="text-align:center;"><u><i>GUARANTEE CERTIFICATE</i></u></h2><br/>
                     <table style="width:100%;font-size:16px;">
                         <tr style="width:100%;">
                             <td style="width:45%"><strong>NAME OF THE CLIENT</strong></td>
@@ -36,7 +36,7 @@
                         <tr style="width:100%;">
                             <td style="width:45%"><strong>SYSTEM APPLIED</strong></td>
                             <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.type_of_construction"/> </strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.project_id.construction_type.name"/> </strong></td>
                         </tr>
 
                         <tr style="width:100%;">
@@ -66,10 +66,11 @@
                     </div>
                     <br/>
                 </div>
-<!--                <footer style="border-top: 1px solid black;" class="footer o_standard_footer">-->
-<!--                    <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>-->
-<!--                        Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>-->
-<!--                </footer>-->
+                <footer style="border-top: 1px solid black;position:fixed;top:1200px;width:100%;display:block;margin:0 auto;margin-left:-8px;" class="footer o_standard_footer">
+                    <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
+                        Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
+                </footer>
+
 
             </t>
         </t>

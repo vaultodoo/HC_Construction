@@ -23,7 +23,7 @@
         </field>
     </record>
 
-    <act_window name="Water Proofing Guarantee"
+    <act_window name="Guarantee Certificate"
                 res_model="water.proofing.guarantee"
                 binding_model="project.project"
                 view_mode="form"

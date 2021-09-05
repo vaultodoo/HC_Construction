@@ -236,6 +236,11 @@
                     <div class="col-8">
                         <strong><field name="stage_id"/></strong>
                     </div>
+                    <div class="col-12">
+                        <strong><field name="proforma_pending"/> <span class="text-danger">Pending Proforma </span></strong>
+                        <strong><field name="proforma_paid"/> <span class="text-success">Paid Proforma </span></strong>
+                    </div>
+
 
                 </xpath>
             </field>
@@ -326,23 +331,23 @@
         </record>
 
         <record id="action_construction_type" model="ir.actions.act_window">
-            <field name="name">Construction Type</field>
+            <field name="name">Project Type</field>
             <field name="res_model">construction.type</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_construction_type" name="Construction Type" parent="menu_const_configuration" action="action_construction_type" sequence="11"/>
+        <menuitem id="menu_construction_type" name="Project Type" parent="menu_const_configuration" action="action_construction_type" sequence="11"/>
 
 
         <record id="res_partner_form_project_inherit" model="ir.ui.view">
-        <field name="name">res.partner.project.view.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-        <xpath expr="//field[@name='type']" position="before">
-            <field name="partner_initial"/>
-        </xpath>
-        </field>
+            <field name="name">res.partner.project.view.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="before">
+                    <field name="partner_initial"/>
+                </xpath>
+            </field>
         </record>
 
 

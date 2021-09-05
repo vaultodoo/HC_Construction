@@ -14,14 +14,14 @@ class ProjectProject(models.Model):
         ('commercial', 'Commercial'),
         ('institutional','Institutional'),
         ('industrial','Industrial'),
-        ('heavy_civil','Heavy civil'),
-        ('environmental','Environmental'),
-        ('other','other')],
+        ('heavy_civil', 'Heavy civil'),
+        ('environmental', 'Environmental'),
+        ('other', 'other')],
         string='Types of Construction',  track_visibility='onchange'
     )
     construction_type = fields.Many2one(
         'construction.type',
-        string='Types of Construction',track_visibility='onchange'
+        string='Project Type', track_visibility='onchange'
     )
     location_id = fields.Many2one(
         'res.partner',
@@ -71,6 +71,8 @@ class ProjectProject(models.Model):
     contract_date = fields.Date(string="PO/Contract Date",tracking=True)
     invoice_count = fields.Integer(related="sale_order_id.invoice_count", store=True)
     proforma_count = fields.Integer(compute='compute_proforma_count')
+    proforma_paid = fields.Integer(compute='compute_proforma_count')
+    proforma_pending = fields.Integer(compute='compute_proforma_count')
 
     @api.onchange('contract_date', 'job_order')
     def get_sale_order_details(self):
@@ -140,9 +142,12 @@ class ProjectProject(models.Model):
             "res_id": self.sale_order_id.id,
             "context": {"create": False, "show_sale": True},
         }
+    
     def compute_proforma_count(self):
         for rec in self:
-            rec.proforma_count = self.env['proforma.invoice'].search_count([('project_id', '=', self.id)])
+            rec.proforma_count = self.env['proforma.invoice'].search_count([('project_id', '=', rec.id)])
+            rec.proforma_pending = self.env['proforma.invoice'].search_count([('project_id', '=', rec.id), ('state', '=', 'new')])
+            rec.proforma_paid = self.env['proforma.invoice'].search_count([('project_id', '=', rec.id), ('state', '=', 'paid')])
 
     def action_view_proforma(self):
         proformas = self.env['proforma.invoice'].search([('project_id', '=', self.id)]).ids
@@ -210,13 +215,39 @@ class ProjectProject(models.Model):
 
                 requisition = self.env['material.purchase.requisition'].create(values)
                 requisition.request_stock()
-                picikng = self.env['stock.picking'].search([('custom_requisition_id','=',requisition.id),('state','=','draft')])
-                picikng.action_confirm()
-                picikng.action_assign()
-                picikng.sudo().button_validate()
+                pickings = self.env['stock.picking'].search([('custom_requisition_id','=',requisition.id),('state','=','draft')])
+                pickings.action_confirm()
+                pickings.action_assign()
+                pickings.sudo().button_validate()
+                if pickings:
 
-                for tt in transfers:
-                    tt.transfer_generated = 'yes'
+                    pick_to_backorder = self.env['stock.picking']
+                    pick_to_do = self.env['stock.picking']
+                    for picking in pickings:
+                        # If still in draft => confirm and assign
+                        if picking.state == 'draft':
+                            picking.action_confirm()
+                            if picking.state != 'assigned':
+                                picking.action_assign()
+                                if picking.state != 'assigned':
+                                    raise UserError(
+                                        _("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
+                        for move in picking.move_lines.filtered(lambda m: m.state not in ['done','cancel']):
+                            for move_line in move.move_line_ids:
+                                move_line.qty_done = move_line.product_uom_qty
+                        if picking._check_backorder():
+                            pick_to_backorder |= picking
+                            continue
+                        pick_to_do |= picking
+                    # Process every picking that do not require a backorder, then return a single backorder wizard for every other ones.
+                    if pick_to_do:
+                        pick_to_do.action_done()
+                    for tt in transfers:
+                        tt.transfer_generated = 'yes'
+                    if pick_to_backorder:
+                        return pick_to_backorder.action_generate_backorder_wizard()
+                    return False
+
 
 
 class ProjectTaskType(models.Model):
@@ -290,15 +321,15 @@ class SaleOrder(models.Model):
     def create(self,vals):
         if vals.get('name',_('New')) == _('New'):
             seq_date = None
-            initial = self.env['res.partner'].search([('id','=',vals.get('partner_id'))]).partner_initial
+            if 'date_order' in vals:
+                seq_date = fields.Datetime.context_timestamp(self,fields.Datetime.to_datetime(vals['date_order']))
+            initial = self.env['res.users'].search([('id','=',vals.get('user_id'))]).partner_id.partner_initial
             split_seq = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
                 'sale.order.seq',sequence_date=seq_date).split('/')[2]
             initial_split_concat = initial + "-" + split_seq if initial else split_seq
             split = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
                 'sale.order.seq', sequence_date=seq_date)[0:-5]
             seq = split + initial_split_concat + "/" + str(fields.Date.today().year)
-            if 'date_order' in vals:
-                seq_date = fields.Datetime.context_timestamp(self,fields.Datetime.to_datetime(vals['date_order']))
             vals['name'] = seq or _('New')
 
         # Makes sure partner_invoice_id', 'partner_shipping_id' and 'pricelist_id' are defined

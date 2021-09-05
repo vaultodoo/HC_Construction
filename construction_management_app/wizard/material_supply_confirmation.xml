@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record id="water_proof_completion_form" model="ir.ui.view">
-        <field name="name">water.proof.completion.form</field>
-        <field name="model">water.proof.completion</field>
+    <record id="sub_contract_agreement_form" model="ir.ui.view">
+        <field name="name">material.supply.confirmation.form</field>
+        <field name="model">material.supply.confirmation</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
                     <group>
                         <field name="date"/>
-                        <field name="attention"/>
-                        <field name="letter_body"/>
+                        <field name="to_address"/>
+                        <field name="client"/>
+                        <field name="consultant"/>
+                        <field name="nature_work"/>
                     </group>
                 </sheet>
                 <footer>
@@ -19,13 +21,13 @@
         </field>
     </record>
 
-    <act_window name="Completion Certificate"
-                res_model="water.proof.completion"
+    <act_window name="Material Supply Confirmation"
+                res_model="material.supply.confirmation"
                 binding_model="project.project"
                 view_mode="form"
                 binding_views="form"
                 target="new"
-                id="water_proofing_completion_action"
+                id="material_supply_confirmation_action"
     />
 
 </odoo>
