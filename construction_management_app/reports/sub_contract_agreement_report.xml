@@ -3,16 +3,21 @@
     <template id="sub_contract_agreement_report_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <header>
-                    <t t-if="o.company_id.certificate_header">
-                        <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
-                    </t>
-                </header>
+                <div class="header">
+                    <div class="row">
+                        <t t-if="o.company_id.certificate_header">
+                            <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                        </t>
+                    </div>
+                </div>
+                <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
                 <div class="page" style="text-align:center;">
-                    <h3 style="text-align:left;width:100%;">SCA Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </h3>
+                    <br/>
+                        <div style="margin-top:75px;"/>
+                    <h6 style="text-align:left;width:100%;"><b>SCA Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </b></h6>
                     <h2 style="text-align:center;"><u>Sub Contract Agreement</u></h2><br/>
-                    <i><u><strong>The Sub Contract Agreement between <span t-esc="o.project_id.partner_id.name"/> Tel:<span t-esc="o.company_id.phone"/> Fax: <span t-esc="o.company_id.phone"/>
-                    (First Party) and <span t-esc="o.company_id.name"/> (second party) is hereby agreed scope of work and payment terms as follows and signed this agreement, dated <span t-esc="time.strftime('%d-%B-%Y')"/></strong></u></i>
+                    <h5><i><u><strong>The Sub Contract Agreement between <span t-esc="o.project_id.partner_id.name"/> Tel:<span t-esc="o.company_id.phone"/> Fax: <span t-esc="o.company_id.phone"/>
+                        (First Party) and <span t-esc="o.company_id.name"/> (second party) is hereby agreed scope of work and payment terms as follows and signed this agreement, dated <span t-esc="time.strftime('%d-%B-%Y')"/></strong></u></i></h5>
                     <i><table style="width:100%;font-size:16px;">
                         <tr style="width:100%;">
                             <td style="width:45%"><strong>CONTRACTOR</strong></td>
@@ -50,10 +55,11 @@
                     </div>
                     <br/>
                 </div>
-                <footer style="border-top: 1px solid black;position:fixed;top:1200px;width:100%;display:block;margin:0 auto;margin-left:-8px;" class="footer o_standard_footer">
+                </div>
+                <div class="footer" style="font-size:16px;border-top:1px solid black;">
                     <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
                         Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
-                </footer>
+                </div>
 
             </t>
         </t>
@@ -67,6 +73,8 @@
             name="construction_management_app.sub_contract_agreement_report_template"
             file="construction_management_app.sub_contract_agreement_report_template"
             report_type="qweb-pdf"
+            attachment_use="True"
+            attachment="'Subcontract Agreement' + '.pdf'"
             paperformat="construction_management_app.water_proofing_paper_format"/>
 
 

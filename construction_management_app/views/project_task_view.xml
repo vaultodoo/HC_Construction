@@ -49,6 +49,8 @@
                                         <field name="product_id"/>
                                         <field name="product_uom_qty"/>
                                         <field name="product_uom"/>
+                                        <field name="price" sum="Price" widget="monetary" optional="show"/>
+                                        <field name="total_price" sum="Total Price" widget="monetary" optional="show"/>
                                         <field name="state"/>
                                         <field name="is_returned" invisible="1"/>
                                         <button name="return_product" string="Return" type="object" class="btn-primary btn-danger o_fsm_stop"
@@ -64,6 +66,8 @@
                                         <field name="product_id"/>
                                         <field name="product_uom_qty"/>
                                         <field name="product_uom"/>
+                                        <field name="price" sum="Price" widget="monetary" optional="show"/>
+                                        <field name="total_price" sum="Total Price" widget="monetary" optional="show"/>
                                         <field name="returned_reason"/>
                                         <field name="state"/>
                                     </tree>
@@ -77,13 +81,17 @@
                                         <field name="description"/>
                                         <field name="product_uom_qty"/>
                                         <field name="product_uom"/>
+                                        <field name="price" sum="Price" widget="monetary" optional="show"/>
+                                        <field name="total_price" sum="Total Price" widget="monetary" optional="show"/>
                                     </tree>
                                 </field>
                             </page>
-
-
                         </notebook>
                     </page>
+                </xpath>
+                <xpath expr="//field[@name='timesheet_ids']/tree/field[@name='unit_amount']" position="after">
+                    <field name="price_unit" invisible="1" sum="Total Cost" widget="monetary" optional="show"/>
+                    <field name="total_price" invisible="1" sum="Total Cost" widget="monetary" optional="show"/>
                 </xpath>
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button class="oe_stat_button" string="Stock Moves" name="view_stock_moves" type="object" icon="fa-navicon">

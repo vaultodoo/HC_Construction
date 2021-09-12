@@ -4,7 +4,7 @@
 from . import task
 from . import project
 from . import note
-# from . import purchase
+from . import purchase
 from . import product
 from . import purchase_requisition
 from . import project_phase_template

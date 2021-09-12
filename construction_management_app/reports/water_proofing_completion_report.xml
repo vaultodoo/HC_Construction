@@ -3,86 +3,92 @@
     <template id="water_proofing_completion_report_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <header>
-                    <t t-if="o.company_id.certificate_header">
-                        <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
-                    </t>
-                </header>
-                <div class="page" style="text-align:center;">
-                    <h3 style="text-align:left;width:100%;">Date : <span t-esc="o.date"/> </h3>
-                    <h2 style="text-align:center;"><u>COMPLETION CERTIFICATE</u></h2>
-                    <table style="width:100%;font-size:16px;">
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>MAIN CONTRACTOR</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>TEL/FAX</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong>Tel:<span t-esc="o.company_id.phone"/> </strong> <strong>Fax:<span t-esc="o.company_id.fax"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>ATTENTION</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.attention"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>SUB CONTRACTOR</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.company_id.name"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>PROJECT</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>TYPE OF WORKS</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.construction_type.name"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>DATE OF COMPLETION</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.contract_date"/> </strong></td>
-                        </tr>
-                    </table>
-                    <span>
-                        <span style="text-align:left;font-size:14px;padding:0px;" t-raw="o.letter_body"/>
-                    </span>
-                    <div style="width:100%;text-align:left;font-size:16px;"><span>
-                        Please sign and return this Fax:<span t-esc="o.company_id.fax"/> / Email:<span t-esc="o.company_id.email"/>
-                    </span>
-                    </div>
-                    <br/>
-                    <div style="width:100%;text-align:left;font-size:16px;">
-                        <span><i>For</i><strong> <span t-esc="o.company_id.name"/></strong></span>
-                        <span style="margin-left:330px;"><strong>Main Contractor</strong></span>
-                    </div>
-                    <br/>
-                    <div style="width:100%;text-align:left;font-size:16px;">
-                        <span><strong> Authorized Signatory</strong></span>
-                        <span style="margin-left:300px;">Sign &amp; Stamp</span><span>.........................................</span>
-                        <br/>
-                        <span style="margin-left:490px;">Date</span><span>.........................................</span>
-                    </div>
-                    <br/>
-                    <div style="display:block;width:100%;text-align:left;border:1px solid black;">
-                        <span><strong>Please send back to us with your comments if any:</strong></span><br/>
-                        <span>
-                            <strong>
-                                REMARKS:.................................................................................................
-                                ...........................................................................................
-                                ..................................................................................................
-                            </strong>
-                        </span>
+                <div class="header">
+                    <div class="row">
+                        <t t-if="o.company_id.certificate_header">
+                            <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                        </t>
                     </div>
                 </div>
-                <footer style="border-top: 1px solid black;position:fixed;top:1200px;width:100%;display:block;margin:0 auto;margin-left:-8px;" class="footer o_standard_footer">
+                <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
+                    <div class="page" style="text-align:center;">
+                        <br/>
+                        <div style="margin-top:75px;"/>
+                        <h6 style="text-align:left;width:100%;"><b>Date : <span t-esc="o.date"/></b> </h6>
+                        <h5 style="text-align:center;"><b><u>COMPLETION CERTIFICATE</u></b></h5>
+                        <table style="width:100%;font-size:16px;">
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>MAIN CONTRACTOR</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>TEL/FAX</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong>Tel:<span t-esc="o.company_id.phone"/> </strong> <strong>Fax:<span t-esc="o.company_id.fax"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>ATTENTION</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.attention"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>SUB CONTRACTOR</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.company_id.name"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>PROJECT</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>TYPE OF WORKS</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.project_id.construction_type.name"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>DATE OF COMPLETION</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.project_id.contract_date"/> </strong></td>
+                            </tr>
+                        </table>
+                        <span>
+                            <span style="text-align:left;font-size:14px;padding:0px 0px;" t-raw="o.letter_body"/>
+                        </span>
+                        <div style="width:100%;text-align:left;font-size:16px;"><span>
+                            Please sign and return this Fax:<span t-esc="o.company_id.fax"/> / Email:<span t-esc="o.company_id.email"/>
+                        </span>
+                        </div>
+                        <br/>
+                        <div style="width:100%;text-align:left;font-size:16px;">
+                            <span><i>For</i><strong> <span t-esc="o.company_id.name"/></strong></span>
+                            <span style="margin-left:330px;"><strong>Main Contractor</strong></span>
+                        </div>
+                        <br/>
+                        <div style="width:100%;text-align:left;font-size:16px;">
+                            <span><strong> Authorized Signatory</strong></span>
+                            <span style="margin-left:300px;">Sign &amp; Stamp</span><span>.........................................</span>
+                            <br/>
+                            <span style="margin-left:490px;">Date</span><span>.........................................</span>
+                        </div>
+                        <br/>
+                        <div style="display:block;width:100%;text-align:left;border:1px solid black;">
+                            <span><strong>Please send back to us with your comments if any:</strong></span><br/>
+                            <span>
+                                <strong>
+                                    REMARKS:.................................................................................................
+                                    ...........................................................................................
+                                    ..................................................................................................
+                                </strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer" style="font-size:16px;border-top:1px solid black;">
                     <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
                         Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
-                </footer>
+                </div>
 
 
 
@@ -100,7 +106,7 @@
         <field name="page_width">0</field>
         <field name="orientation">Portrait</field>
         <field name="margin_top">0</field>
-        <field name="margin_bottom">5</field>
+        <field name="margin_bottom">15</field>
         <field name="margin_left">10</field>
         <field name="margin_right">10</field>
         <field name="header_line" eval="False"/>
@@ -116,6 +122,8 @@
             name="construction_management_app.water_proofing_completion_report_template"
             file="construction_management_app.water_proofing_completion_report_template"
             report_type="qweb-pdf"
+            attachment_use="True"
+            attachment="'Completion Certificate' + '.pdf'"
             paperformat="construction_management_app.water_proofing_paper_format"/>
 
 

@@ -73,9 +73,42 @@ class ProjectProject(models.Model):
     proforma_count = fields.Integer(compute='compute_proforma_count')
     proforma_paid = fields.Integer(compute='compute_proforma_count')
     proforma_pending = fields.Integer(compute='compute_proforma_count')
+    total_sale_cost = fields.Float(compute='get_project_value')
+    total_material_cost = fields.Float(compute='get_project_value')
+    profit_amount = fields.Float(compute='get_project_value')
+    profit_percent = fields.Float(compute='get_project_value')
+    total_labour_cost = fields.Float(compute='get_project_value')
+    other_expenses_ids = fields.One2many('other.expense', 'expense_id')
+    final_profit_amount = fields.Float(compute='get_project_value')
+
+    def get_project_value(self):
+        for rec in self:
+            if rec.sale_order_id:
+                rec.total_sale_cost = rec.sale_order_id.amount_total
+            if rec.project_task_ids:
+                material = 0.0
+                employee_cost = 0.0
+                for task in rec.project_task_ids:
+                    price = sum(task.consumed_material_ids.mapped('total_price'))
+                    emp_cost = sum(task.timesheet_ids.mapped('total_price'))
+                    material += price
+                    employee_cost += emp_cost
+                rec.total_material_cost = material
+                rec.total_labour_cost = employee_cost
+            total_cost = rec.total_labour_cost + rec.total_material_cost
+            rec.profit_amount = rec.total_sale_cost - total_cost
+            rec.profit_percent = (rec.profit_amount/rec.total_sale_cost)*100
+            expense = 0.0
+            if rec.other_expenses_ids:
+                expense = sum(rec.other_expenses_ids.mapped('cost'))
+            rec.final_profit_amount = rec.profit_amount - expense
+
 
     @api.onchange('contract_date', 'job_order')
     def get_sale_order_details(self):
+        exists = self.env['project.project'].search([('job_order','=',self.job_order)])
+        if exists:
+            raise ValidationError("You cannot create multiple projects with same job order")
         if self.sale_order_id:
             self.sale_order_id.contract_date = self.contract_date
             self.sale_order_id.job_order = self.job_order
@@ -433,6 +466,26 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     partner_initial = fields.Char(string="Partner Initial")
+
+
+class OtherExpense(models.Model):
+    _name = 'other.expense'
+
+    expense = fields.Char(string="Expense")
+    cost = fields.Float(string="Cost")
+    expense_id = fields.Many2one('project.project')
+
+class AccountAnalyticLine(models.Model):
+    _inherit = 'account.analytic.line'
+    price_unit = fields.Float(compute='get_employee_rate', store=True)
+    total_price = fields.Float(compute='get_employee_rate', store=True)
+
+    @api.depends('employee_id')
+    def get_employee_rate(self):
+        for rec in self:
+            if rec.employee_id:
+                rec.price_unit = rec.employee_id.timesheet_cost
+                rec.total_price = rec.price_unit * rec.unit_amount
 
 
 

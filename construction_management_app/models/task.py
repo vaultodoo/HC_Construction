@@ -119,6 +119,15 @@ class ConsumedMaterial(models.Model):
         'Consumed Material Plan Task'
     )
 
+    price = fields.Float(related="product_id.standard_price",store=True)
+    total_price = fields.Float(compute='get_total_price',store=True)
+
+    @api.depends('price','product_uom_qty')
+    def get_total_price(self):
+        for rec in self:
+            rec.total_price = rec.price * rec.product_uom_qty
+
+
 
 class ProjectTask(models.Model):
     _inherit = 'project.task'
@@ -296,6 +305,13 @@ class StockMove(models.Model):
 
     is_returned = fields.Boolean(string="Is Returned?")
     returned_reason = fields.Text(string="Returned Reason")
+    price = fields.Float(related="product_id.standard_price", store=True)
+    total_price = fields.Float(compute='get_total_price', store=True)
+
+    @api.depends('price', 'product_uom_qty')
+    def get_total_price(self):
+        for rec in self:
+            rec.total_price = rec.price*rec.product_uom_qty
 
     def return_product(self):
         for rec in self:

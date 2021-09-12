@@ -12,3 +12,4 @@ access_upload_documents,name_upload_documents,model_upload_documents,,1,1,1,1
 access_proforma_invoices,name_proforma_invoices,model_proforma_invoice,,1,1,1,1
 access_labour_plan,name_labour_plan,model_labour_plan,,1,1,1,1
 access_construction_type,name_construction_type,model_construction_type,,1,1,1,1
+access_other_expense,name_other_expense,model_other_expense,,1,1,1,1

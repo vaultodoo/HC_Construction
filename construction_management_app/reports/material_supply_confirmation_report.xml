@@ -3,35 +3,41 @@
     <template id="material_supply_confirmation_report_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <header>
-                    <t t-if="o.company_id.certificate_header">
-                        <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
-                    </t>
-                </header>
-                <div class="page" style="text-align:center;">
-                    <h4 style="text-align:left;width:100%;">Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </h4>
-                    <h4 style="text-align:left;width:100%;">Date : <span t-esc="o.date"/> </h4>
-                    <h4 style="text-align:left;width:100%;">TO : </h4>
-                    <h4 style="text-align:left;width:100%;"><span t-esc="o.to_address"/></h4>
-                    <h3 style="text-align:center;"><u>PROJECT:<span t-esc="o.project_id.name"/></u></h3>
-                    <h3 style="text-align:center;"><u>CLIENT/OWNER:<span t-esc="o.client"/></u></h3>
-                    <h3 style="text-align:center;"><u>CONSULTANT:<span t-esc="o.consultant"/></u></h3>
-                    <h3 style="text-align:center;"><u>CONTRACTOR:<span t-esc="o.project_id.partner_id.name"/></u></h3>
-                    <h3 style="text-align:center;"><u>MATERIAL SUPPLY CONFIRMATION</u></h3>
-                    <span>
-                        <span style="text-align:left;font-size:15px;" t-raw="o.nature_work"/>
-                    </span>
-                    <div style="width:100%;text-align:left;font-size:14px;">
-                        <span><i>For</i><strong> <span t-esc="o.company_id.name"/></strong></span>
-                    </div><br/><br/>
-                    <div style="width:100%;text-align:left;font-size:14px;">
-                        <span><strong> Authorized Signatory</strong></span>
+                <div class="header">
+                    <div class="row">
+                        <t t-if="o.company_id.certificate_header">
+                            <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
+                        </t>
                     </div>
                 </div>
-                <footer style="border-top: 1px solid black;position:fixed;top:1220px;width:100%;display:block;margin:0 auto;margin-left:-8px;" class="footer o_standard_footer">
+                <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
+                    <div class="page" style="text-align:center;">
+                        <br/>
+                        <div style="margin-top:75px;"/>
+                        <h6 style="text-align:left;"><b>Ref.No : <span t-esc="o.project_id.sale_order_id.name"/></b> </h6>
+                        <h6 style="text-align:left;"><b>Date : <span t-esc="o.date"/></b> </h6>
+                        <h6 style="text-align:left;"><b>TO : </b></h6>
+                        <h6 style="text-align:left;"><b><span t-esc="o.to_address"/></b></h6><br/>
+                        <h6 style="text-align:center;"><u><strong>PROJECT:<span t-esc="o.project_id.name"/></strong></u></h6>
+                        <h6 style="text-align:center;"><u><b>CLIENT/OWNER:<span t-esc="o.client"/></b></u></h6>
+                        <h6 style="text-align:center;"><u><b>CONSULTANT:<span t-esc="o.consultant"/></b></u></h6>
+                        <h6 style="text-align:center;"><u><b>CONTRACTOR:<span t-esc="o.project_id.partner_id.name"/></b></u></h6>
+                        <h6 style="text-align:center;"><b><u>MATERIAL SUPPLY CONFIRMATION</u></b></h6>
+                        <span>
+                            <span style="text-align:left;font-size:14px;" t-raw="o.nature_work"/>
+                        </span>
+                        <div style="width:100%;text-align:left;font-size:14px;">
+                            <span><i>For</i><strong> <span t-esc="o.company_id.name"/></strong></span>
+                        </div><br/><br/>
+                        <div style="width:100%;text-align:left;font-size:14px;">
+                            <span><strong> Authorized Signatory</strong></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer" style="font-size:16px;border-top:1px solid black;">
                     <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
                         Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
-                </footer>
+                </div>
 
             </t>
         </t>
@@ -45,6 +51,8 @@
             name="construction_management_app.material_supply_confirmation_report_template"
             file="construction_management_app.material_supply_confirmation_report_template"
             report_type="qweb-pdf"
+            attachment_use="True"
+            attachment="'Material Supply Confirmation Report' + '.pdf'"
             paperformat="construction_management_app.water_proofing_paper_format"/>
 
 

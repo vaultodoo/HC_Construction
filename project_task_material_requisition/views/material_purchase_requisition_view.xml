@@ -12,9 +12,9 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='analytic_account_id']"
                 position="after">
-                <field name="custom_project_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="custom_project_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
                 <field name="custom_task_id"
-                    domain="[('project_id','=',custom_project_id)]" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    domain="[('project_id','=',custom_project_id)]" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
             </xpath>
         </field>
     </record>

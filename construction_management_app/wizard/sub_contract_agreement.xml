@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record id="sub_contract_agreement_form" model="ir.ui.view">
+    <record id="sub_contract_agreement_wizard_form" model="ir.ui.view">
         <field name="name">sub.contract.agreement.form</field>
         <field name="model">sub.contract.agreement</field>
         <field name="arch" type="xml">
@@ -27,7 +27,7 @@
                 view_mode="form"
                 binding_views="form"
                 target="new"
-                id="sub_contract_agreement_action"
+                id="sub_contract_agreement_form_action"
     />
 
 </odoo>
