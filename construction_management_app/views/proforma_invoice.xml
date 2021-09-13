@@ -36,10 +36,10 @@
                             <field name="fixed_amount" attrs="{'invisible':[('amount','!=','fixed')]}"/>
                             <field name="final_amount"/>
                             <field name="remaining_amount"/>
-                            <field name="tax_ids" widget="many2many_tags" invisible="1"/>
-                            <field name="tax_amount" invisible="1"/>
-                            <field name="tax_included" invisible="1"/>
-                            <field name="tax_excluded" invisible="1"/>
+                            <field name="tax_ids" widget="many2many_tags" invisible="0"/>
+                            <field name="tax_amount" invisible="0"/>
+                            <field name="tax_included" invisible="0"/>
+                            <field name="tax_excluded" invisible="0"/>
                         </group>
                     </group>
                 </sheet>

@@ -97,21 +97,25 @@ class ProjectProject(models.Model):
                 rec.total_labour_cost = employee_cost
             total_cost = rec.total_labour_cost + rec.total_material_cost
             rec.profit_amount = rec.total_sale_cost - total_cost
-            rec.profit_percent = (rec.profit_amount/rec.total_sale_cost)*100
+            rec.profit_percent = (rec.profit_amount/rec.total_sale_cost)*100 if rec.total_sale_cost else 0.0
             expense = 0.0
             if rec.other_expenses_ids:
                 expense = sum(rec.other_expenses_ids.mapped('cost'))
             rec.final_profit_amount = rec.profit_amount - expense
 
-
-    @api.onchange('contract_date', 'job_order')
-    def get_sale_order_details(self):
+    @api.onchange('job_order')
+    def job_order_warning(self):
         exists = self.env['project.project'].search([('job_order','=',self.job_order)])
         if exists:
             raise ValidationError("You cannot create multiple projects with same job order")
+
+    @api.onchange('contract_date', 'job_order','sales_person', 'user_id')
+    def get_sale_order_details(self):
         if self.sale_order_id:
             self.sale_order_id.contract_date = self.contract_date
             self.sale_order_id.job_order = self.job_order
+            self.sale_order_id.user_id = self.sales_person.id
+            self.sale_order_id.project_manager = self.user_id.id
 
     @api.depends()
     def _compute_notes_count(self):
@@ -349,6 +353,16 @@ class SaleOrder(models.Model):
     project_name = fields.Char(string="Project Name")
     job_order = fields.Char(string="Job Order")
     contract_date = fields.Date(string="PO/Contract Date")
+    project_manager = fields.Many2one('res.users', string="Project Manager")
+
+    @api.onchange('contract_date', 'job_order', 'project_manager', 'user_id')
+    def get_sale_order_details(self):
+        if self.project_ids:
+            for pro in self.project_ids:
+                pro.contract_date = self.contract_date
+                pro.job_order = self.job_order
+                pro.sales_person = self.user_id.id
+                pro.user_id = self.project_manager.id
 
     @api.model
     def create(self,vals):
@@ -439,13 +453,15 @@ class SaleOrderLine(models.Model):
             account = self.order_id.analytic_account_id
 
         return {
-            'name': '%s - %s' % (self.order_id.project_name, self.order_id.name) if self.order_id.project_name else self.order_id.name,
+            'name': '%s' % self.order_id.project_name if self.order_id.project_name else self.order_id.name,
             'analytic_account_id': account.id,
             'partner_id': self.order_id.partner_id.id,
             'sale_line_id': self.id,
             'sale_order_id': self.order_id.id,
             'active': True,
             'company_id': self.company_id.id,
+            'sales_person': self.order_id.user_id.id,
+            'user_id': self.order_id.project_manager.id
         }
 
 

@@ -13,7 +13,7 @@ class ProforomaInvoice(models.Model):
     description = fields.Text(string="Description")
     project_id = fields.Many2one('project.project', string="Project")
     task_ids = fields.Many2many('project.task', string="Completed Phases")
-    tax_ids = fields.Many2many('account.tax', string="Taxes")
+    tax_ids = fields.Many2many('account.tax', string="Taxes", compute='get_sale_taxes',store=True)
     partner_id = fields.Many2one('res.partner')
     company_id = fields.Many2one('res.company',default=lambda self: self.env.company)
     amount = fields.Selection([('percent', 'By Percentage'), ('fixed', 'BY Fixed Amount')], string="Amount")
@@ -47,14 +47,20 @@ class ProforomaInvoice(models.Model):
     def compute_final_amount(self):
         for rec in self:
             if rec.percentage:
-                percent = rec.sale_order_value * (rec.percentage/100)
+                percent = rec.amount_untaxed * (rec.percentage/100)
                 rec.final_amount = percent
-                rec.remaining_amount = rec.sale_order_value - percent
+                rec.remaining_amount = rec.amount_untaxed - percent
             if rec.fixed_amount:
                 rec.final_amount = rec.fixed_amount
-                rec.remaining_amount = rec.sale_order_value - rec.fixed_amount
+                rec.remaining_amount = rec.amount_untaxed - rec.fixed_amount
+
+    @api.depends('sale_order_id')
+    def get_sale_taxes(self):
+        for rec in self:
+            if rec.sale_order_id:
+                rec.tax_ids = [(4, i)for i in rec.sale_order_id.order_line.mapped('tax_id').ids]
                 
-    @api.depends('tax_ids')
+    @api.depends('tax_ids','final_amount')
     def compute_tax_amount(self):
         for rec in self:
             taxes = rec.tax_ids.compute_all(rec.final_amount, rec.company_id.currency_id, partner=rec.partner_id)

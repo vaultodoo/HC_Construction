@@ -200,7 +200,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//form/header/field[@name='stage_id']" position="before">
                     <button string="Create Subtasks" type="action" name="%(action_proejct_subtask_user_wizard)d"
-                            class="oe_highlight" groups="project.group_project_manager" />
+                            class="oe_highlight" groups="project.group_project_manager" invisible="1" />
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page[2]" position="after">
                     <page name="subtasks" string="Subtasks">
@@ -261,8 +261,8 @@
                         <strong><field name="stage_id"/></strong>
                     </div>
                     <div class="col-12">
-                        <strong><field name="proforma_pending"/> <span class="text-danger">Pending Proforma </span></strong>
-                        <strong><field name="proforma_paid"/> <span class="text-success">Paid Proforma </span></strong>
+                        <strong>Proforma : <span class="text-danger"> <field name="proforma_pending"/> Pending</span></strong>
+                        <strong><span class="text-success"><field name="proforma_paid"/> Paid</span></strong>
                     </div>
 
 
@@ -277,11 +277,14 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='partner_id']" position="before">
-                    <field name="project_name"/>
+                    <field name="project_name" attrs="{'readonly':[('state','!=','draft')]}"/>
                 </xpath>
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="job_order" attrs="{'invisible': [('project_ids', '=', [])]}"/>
                     <field name="contract_date" attrs="{'invisible': [('project_ids', '=', [])]}"/>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="project_manager"/>
                 </xpath>
 
             </field>

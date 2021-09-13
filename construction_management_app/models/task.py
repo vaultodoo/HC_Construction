@@ -26,7 +26,7 @@ class MaterialPlanning(models.Model):
     description = fields.Char(
         string='Description'
     )
-    product_uom_qty = fields.Integer(
+    product_uom_qty = fields.Float(
         'Quantity',
     )
     product_uom = fields.Many2one(

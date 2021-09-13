@@ -47,7 +47,7 @@
                                         <field name="date_expected"/>
                                         <field name="origin"/>
                                         <field name="product_id"/>
-                                        <field name="product_uom_qty"/>
+                                        <field name="product_uom_qty" string="Quantity"/>
                                         <field name="product_uom"/>
                                         <field name="price" sum="Price" widget="monetary" optional="show"/>
                                         <field name="total_price" sum="Total Price" widget="monetary" optional="show"/>
@@ -64,7 +64,7 @@
                                         <field name="date_expected"/>
                                         <field name="origin"/>
                                         <field name="product_id"/>
-                                        <field name="product_uom_qty"/>
+                                        <field name="product_uom_qty" string="Quantity"/>
                                         <field name="product_uom"/>
                                         <field name="price" sum="Price" widget="monetary" optional="show"/>
                                         <field name="total_price" sum="Total Price" widget="monetary" optional="show"/>
