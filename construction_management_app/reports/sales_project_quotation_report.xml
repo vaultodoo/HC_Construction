@@ -10,9 +10,16 @@
                         </t>
                     </div>
                 </div>
-                <div class="page">
-                    <span>TESTTTTTTTTTTTTTTTTTT</span>
-                    <h5 style="text-align:left;"><b><u>To: <span t-esc="o.sale_id.partner_id.name"/>     From:<span t-esc="o.company_id.name"/> </u></b></h5>
+                <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
+                    <br/>
+                    <div style="margin-top:75px;"/>
+                    <div class="page">
+                        <h5 style="text-align:left;width:100%;"><b><u><span style="width:50%;">To: <span t-esc="o.sale_id.partner_id.name"/></span>     <span style="width:50%;">From:<span t-esc="o.company_id.name"/></span> </u></b></h5>
+                        <br/>
+                        <h5 style="text-align:left;width:100%;"><b><u><span style="width:33%;">Tel: <span t-esc="o.sale_id.partner_id.phone"/></span>     Fax:<span t-esc="o.sale_id.partner_id.mobile"/>      Date:<span t-esc="o.date"/> </u></b></h5>
+                        <br/>
+                        <h5 style="text-align:left;width:100%;"><b><u>Attn: <span t-esc="o.attention"/>     Ref:<span t-esc="o.sale_id.name"/> </u></b></h5>
+                    </div>
                 </div>
             </t>
         </t>

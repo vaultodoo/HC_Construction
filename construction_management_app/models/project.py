@@ -27,6 +27,7 @@ class ProjectProject(models.Model):
         'res.partner',
         'Location',tracking=True
     )
+    location = fields.Char(string="Location", tracking=True)
     notes_ids = fields.One2many(
         'note.note', 
         'project_id', 
@@ -57,6 +58,7 @@ class ProjectProject(models.Model):
     project_phase_ids = fields.Many2many('project.phase.template', string="Project Phases",tracking=True)
     stage_allocated = fields.Boolean(tracking=True)
     sales_person = fields.Many2one('res.users', string="Sales Person",tracking=True)
+    s_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
     job_order = fields.Char(string="Job Order",tracking=True)
     plot_no = fields.Char(string="Plot No",tracking=True)
     document_ids = fields.One2many('upload.documents', 'project_id', string="Documents",tracking=True)
@@ -80,6 +82,14 @@ class ProjectProject(models.Model):
     total_labour_cost = fields.Float(compute='get_project_value')
     other_expenses_ids = fields.One2many('other.expense', 'expense_id')
     final_profit_amount = fields.Float(compute='get_project_value')
+    paid_invoice_amount = fields.Float(compute='get_invoice_amount')
+    pending_invoice_amount = fields.Float(compute='get_invoice_amount')
+
+
+    def get_invoice_amount(self):
+        for rec in self:
+            rec.paid_invoice_amount = sum(self.env['proforma.invoice'].search([('project_id', '=', rec.id), ('state', '=', 'paid')]).mapped('tax_included'))
+            rec.pending_invoice_amount = sum(self.env['proforma.invoice'].search([('project_id', '=', rec.id), ('state', '=', 'new')]).mapped('tax_included'))
 
     def get_project_value(self):
         for rec in self:
@@ -109,12 +119,12 @@ class ProjectProject(models.Model):
         if exists:
             raise ValidationError("You cannot create multiple projects with same job order")
 
-    @api.onchange('contract_date', 'job_order','sales_person', 'user_id')
+    @api.onchange('contract_date', 'job_order', 's_person', 'user_id')
     def get_sale_order_details(self):
         if self.sale_order_id:
             self.sale_order_id.contract_date = self.contract_date
             self.sale_order_id.job_order = self.job_order
-            self.sale_order_id.user_id = self.sales_person.id
+            self.sale_order_id.sales_person = self.s_person.id
             self.sale_order_id.project_manager = self.user_id.id
 
     @api.depends()
@@ -237,7 +247,7 @@ class ProjectProject(models.Model):
                 values = {
                     'custom_project_id':self.id,
                     'custom_task_id':task.id,
-                    'requisition_line_ids': [(0,0,{
+                    'requisition_line_ids': [(0, 0, {
                         'requisition_type':'internal',
                         'product_id':t.product_id.id,
                         'description':t.description,
@@ -354,19 +364,20 @@ class SaleOrder(models.Model):
     job_order = fields.Char(string="Job Order")
     contract_date = fields.Date(string="PO/Contract Date")
     project_manager = fields.Many2one('res.users', string="Project Manager")
+    sales_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
 
-    @api.onchange('contract_date', 'job_order', 'project_manager', 'user_id')
-    def get_sale_order_details(self):
+    @api.onchange('contract_date', 'job_order', 'project_manager', 'sales_person')
+    def onchange_sale_order_details(self):
         if self.project_ids:
             for pro in self.project_ids:
                 pro.contract_date = self.contract_date
                 pro.job_order = self.job_order
-                pro.sales_person = self.user_id.id
+                pro.s_person = self.sales_person.id
                 pro.user_id = self.project_manager.id
 
     @api.model
-    def create(self,vals):
-        if vals.get('name',_('New')) == _('New'):
+    def create(self, vals):
+        if vals.get('name', _('New')) == _('New'):
             seq_date = None
             if 'date_order' in vals:
                 seq_date = fields.Datetime.context_timestamp(self,fields.Datetime.to_datetime(vals['date_order']))
@@ -460,7 +471,7 @@ class SaleOrderLine(models.Model):
             'sale_order_id': self.order_id.id,
             'active': True,
             'company_id': self.company_id.id,
-            'sales_person': self.order_id.user_id.id,
+            's_person': self.order_id.sales_person.id,
             'user_id': self.order_id.project_manager.id
         }
 

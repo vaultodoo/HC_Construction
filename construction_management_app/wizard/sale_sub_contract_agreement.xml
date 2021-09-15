@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sale_sub_contract_agreement_wizard_form" model="ir.ui.view">
+        <field name="name">sale.sub.contract.agreement.form</field>
+        <field name="model">sale.sub.contract.agreement</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="client"/>
+                        <field name="consultant"/>
+                        <field name="contact"/>
+                        <field name="nature_work"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="print_report" type="object" string="Print" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Sub Contract Agreement"
+                res_model="sale.sub.contract.agreement"
+                binding_model="sale.order"
+                view_mode="form"
+                binding_views="form"
+                target="new"
+                id="sale_sub_contract_agreement_form_action"
+    />
+
+</odoo>

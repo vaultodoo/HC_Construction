@@ -1,11 +1,25 @@
 <odoo>
     <data>
+        <record id="view_project_tree_inherit" model="ir.ui.view">
+            <field name="name">project.project.tree</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
 
         <record id="edit_project_inherit_construction" model="ir.ui.view">
             <field name="name">project.project.form</field>
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
                 <xpath expr="//form/sheet/notebook/page[@name='settings']" position="before">
                     <page name="project_tasks" string="Phases">
                         <button name="generate_proforma_invoice" type="object" string="Generate Proforma" class="oe_highlight"/>
@@ -120,7 +134,7 @@
                 <xpath expr="//notebook" position="before">
                     <group>
                         <group>
-                            <field name="sales_person"/>
+                            <field name="s_person"/>
                             <field name="partner_id" string="Customer"/>
                             <field name="job_order"/>
                             <field name="plot_no"/>
@@ -129,7 +143,8 @@
                             <field name="contract_date"/>
                             <field name="user_id" string="Project Manager" attrs="{'readonly':[('active','=',False)]}"/>
                             <field name="construction_type"/>
-                            <field name="location_id" context="{'search_default_customer':1, 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>
+                            <!--                            <field name="location_id" context="{'search_default_customer':1, 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>-->
+                            <field name="location"/>
                         </group>
 
                     </group>
@@ -256,14 +271,23 @@
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.project_view_kanban"/>
             <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
+
                 <xpath expr="//div/div[2]/div[1]" position="after">
                     <div class="col-8">
                         <strong><field name="stage_id"/></strong>
                     </div>
                     <div class="col-12">
-                        <strong>Proforma : <span class="text-danger"> <field name="proforma_pending"/> Pending</span></strong>
+                        <strong>Proforma : <span class="text-danger"> <field name="proforma_pending"/> Pending</span></strong><span style="padding:5px 5px;"></span>
                         <strong><span class="text-success"><field name="proforma_paid"/> Paid</span></strong>
                     </div>
+                    <div class="col-12">
+                        <strong>Invoices : <span class="text-danger"> <field name="pending_invoice_amount"/> Pending</span></strong><span style="padding:5px 5px;"></span>
+                        <strong><span class="text-success"><field name="paid_invoice_amount"/> Paid</span></strong>
+                    </div>
+
 
 
                 </xpath>
@@ -284,7 +308,11 @@
                     <field name="contract_date" attrs="{'invisible': [('project_ids', '=', [])]}"/>
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="sales_person"/>
                     <field name="project_manager"/>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
 
             </field>

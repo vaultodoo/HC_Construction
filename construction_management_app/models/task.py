@@ -106,9 +106,8 @@ class ConsumedMaterial(models.Model):
     description = fields.Char(
         string='Description'
     )
-    product_uom_qty = fields.Integer(
+    product_uom_qty = fields.Float(
         'Quantity',
-        default=1.0
     )
     product_uom = fields.Many2one(
         'uom.uom',
@@ -270,7 +269,8 @@ class ProjectTask(models.Model):
             'view_mode': 'form',
             'res_model': 'return.stock.move',
             'target': 'new',
-            'context': {'default_return_product_ids': moves, 'default_move_ids': self.move_ids.ids, 'default_task_id': self.id}
+            'context': {'default_return_product_ids': moves, 'default_move_ids': self.move_ids.ids, 'default_task_id': self.id,
+                        'default_location_id':self.project_id.dest_location_id.id, 'default_dest_location_id': self.project_id.source_location_id.id}
         }
 
     def compute_consumed_materials(self):
@@ -326,14 +326,15 @@ class StockMove(models.Model):
                     'task_id': rec.picking_id.custom_requisition_id.custom_task_id.id
                 })
                 moves.append(pro_line.id)
-        task = self[0].picking_id.custom_requisition_id.custom_task_id.id if self else False
+        task = self[0].picking_id.custom_requisition_id.custom_task_id if self else False
         return {
             'name': _('Return Product'),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'res_model': 'return.stock.move',
             'target': 'new',
-            'context': {'default_return_product_ids':  moves, 'default_move_ids': self.ids, 'default_task_id': task}
+            'context': {'default_return_product_ids':  moves, 'default_move_ids': self.ids, 'default_task_id': task.id,
+                        'default_location_id':task.project_id.dest_location_id.id, 'default_dest_location_id': task.project_id.source_location_id.id}
         }
 
 

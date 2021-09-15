@@ -104,7 +104,7 @@
                     <field name="start_date"/>
                     <field name="date_end"/>
                     <field name="stage" invisible="1"/>
-                    <field name="proforma_generated"/>
+                    <field name="proforma_generated" invisible="1"/>
                 </field>
                 <xpath expr="//form/sheet/div[@name='button_box']" position="inside">
                     <button class="oe_stat_button" type="object" icon="fa-tasks" name="view_notes">

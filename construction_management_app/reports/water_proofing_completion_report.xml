@@ -15,44 +15,45 @@
                         <br/>
                         <div style="margin-top:75px;"/>
                         <h6 style="text-align:left;width:100%;"><b>Date : <span t-esc="o.date"/></b> </h6>
-                        <h5 style="text-align:center;"><b><u>COMPLETION CERTIFICATE</u></b></h5>
+                        <h5 style="text-align:center;"><b><u>COMPLETION CERTIFICATE</u></b></h5><br/>
                         <table style="width:100%;font-size:16px;">
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>MAIN CONTRACTOR</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong style="text-align:left;">MAIN CONTRACTOR</strong></td>
+                                <td style="width:10%;text-align:left;"><strong style="text-align:left;">:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong><span t-esc="o.project_id.partner_id.name" style="text-align:left;"/> </strong></td>
                             </tr>
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>TEL/FAX</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong>Tel:<span t-esc="o.company_id.phone"/> </strong> <strong>Fax:<span t-esc="o.company_id.fax"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong style="text-align:left;">TEL/FAX</strong></td>
+                                <td style="width:10%;text-align:left;"><strong style="text-align:left;">:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong style="text-align:left;">Tel:<span t-esc="o.company_id.phone" style="text-align:left;"/> </strong> <strong style="text-align:left;">Fax:<span t-esc="o.company_id.fax" style="text-align:left;"/> </strong></td>
                             </tr>
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>ATTENTION</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.attention"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong>ATTENTION</strong></td>
+                                <td style="width:10%;text-align:left;"><strong>:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong><span t-esc="o.attention"/> </strong></td>
                             </tr>
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>SUB CONTRACTOR</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.company_id.name"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong>SUB CONTRACTOR</strong></td>
+                                <td style="width:10%;text-align:left;"><strong>:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong><span t-esc="o.company_id.name"/> </strong></td>
                             </tr>
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>PROJECT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong>PROJECT</strong></td>
+                                <td style="width:10%;text-align:left;"><strong>:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong><span t-esc="o.project_id.name"/> </strong></td>
                             </tr>
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>TYPE OF WORKS</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.construction_type.name"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong>TYPE OF WORKS</strong></td>
+                                <td style="width:10%;text-align:left;"><strong>:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong><span t-esc="o.project_id.construction_type.name"/> </strong></td>
                             </tr>
                             <tr style="width:100%;">
-                                <td style="width:45%"><strong>DATE OF COMPLETION</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.contract_date"/> </strong></td>
+                                <td style="width:45%;text-align:left;"><strong>DATE OF COMPLETION</strong></td>
+                                <td style="width:10%;text-align:left;"><strong>:</strong></td>
+                                <td style="width:45%;text-align:left;"><strong><span t-esc="o.project_id.contract_date"/> </strong></td>
                             </tr>
                         </table>
+                        <br/>
                         <span>
                             <span style="text-align:left;font-size:14px;padding:0px 0px;" t-raw="o.letter_body"/>
                         </span>

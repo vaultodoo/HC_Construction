@@ -2,7 +2,7 @@
 
 # Part of Vault Odoo. See LICENSE file for full copyright and licensing details.
 {
-    'name': 'Construction Management',
+    'name': 'Project Management',
     'version': '18.8',
     'price': 49.0,
     'currency': 'EUR',
@@ -124,6 +124,8 @@ Bill of Quantity construction
         'reports/purchase_order_report.xml',
         # 'reports/sales_project_quotation_report.xml',
         # 'wizard/sales_project_quotation.xml',
+        'reports/sale_sub_contract_agreement_report.xml',
+        'wizard/sale_sub_contract_agreement.xml',
         'data/sequence.xml',
         ],
     'installable': True,
