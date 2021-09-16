@@ -304,6 +304,7 @@
                     <field name="project_name" attrs="{'readonly':[('state','!=','draft')]}"/>
                 </xpath>
                 <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="validity" attrs="{'invisible': [('project_ids', '=', [])]}"/>
                     <field name="job_order" attrs="{'invisible': [('project_ids', '=', [])]}"/>
                     <field name="contract_date" attrs="{'invisible': [('project_ids', '=', [])]}"/>
                 </xpath>

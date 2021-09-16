@@ -1,5 +1,5 @@
 from odoo import api, models, fields
-
+import base64
 
 class SalesProjectQuotation(models.TransientModel):
     _name = 'sales.project.quotation'
@@ -18,5 +18,21 @@ class SalesProjectQuotation(models.TransientModel):
     sale_id = fields.Many2one('sale.order', default=lambda self: self._context.get('active_id', False))
 
     def print_report(self):
+        self.get_report_attachment()
         return self.env.ref('construction_management_app.action_sales_project_quotation_report').report_action(self)
+
+    def get_report_attachment(self):
+        REPORT_ID = 'construction_management_app.action_sales_project_quotation_report'
+        pdf = self.env.ref(REPORT_ID).render_qweb_pdf(self.id)
+        b64_pdf = base64.b64encode(pdf[0])
+        ATTACHMENT_NAME = 'Project Quotation Report'
+        self.env['ir.attachment'].create({
+            'name': ATTACHMENT_NAME,
+            'type': 'binary',
+            'datas': b64_pdf,
+            'res_model': 'sale.order',
+            'res_id': self.sale_id.id,
+            'mimetype': 'application/x-pdf'
+        })
+
 

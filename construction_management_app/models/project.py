@@ -368,6 +368,7 @@ class SaleOrder(models.Model):
     contract_date = fields.Date(string="PO/Contract Date")
     project_manager = fields.Many2one('res.users', string="Project Manager")
     sales_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
+    validity = fields.Char(string="Validity")
 
     @api.onchange('contract_date', 'job_order', 'project_manager', 'sales_person')
     def onchange_sale_order_details(self):

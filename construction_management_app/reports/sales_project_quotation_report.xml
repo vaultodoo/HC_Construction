@@ -28,10 +28,10 @@
                     </div>
                     <br/>
                     <div style="width:100%; font-size:18px;font-weight:bold;margin-top:15px;">
-                        <div style="width:10%;border-bottom:1px solid black;float:left">Attn:</div>
-                        <div style="width:40%;border-bottom:1px solid black;float:left;"><span t-esc="o.attention" style="text-align:left;"/></div>
-                        <div style="width:10%;border-bottom:1px solid black;text-align:left;float:left">Ref:</div>
-                        <div style="width:40%;border-bottom:1px solid black;text-align:left;float:left;"><span t-esc="o.sale_id.name" style="text-align:left;"/></div>
+                        <div style="width:8%;border-bottom:1px solid black;float:left">Attn:</div>
+                        <div style="width:42%;border-bottom:1px solid black;float:left;"><span t-esc="o.attention" style="text-align:left;"/></div>
+                        <div style="width:5%;border-bottom:1px solid black;text-align:left;float:left">Ref:</div>
+                        <div style="width:45%;border-bottom:1px solid black;text-align:left;float:left;"><span t-esc="o.sale_id.name" style="text-align:left;"/></div>
                     </div>
                     <br/>
                     <div style="width:100%; font-size:18px;font-weight:bold;margin-top:15px;">
@@ -95,7 +95,7 @@
                     </div>
                     <div style="width:100%;">
                         <h4><u> VALIDITY OF QUOTATION</u></h4>
-                        <span t-esc="o.scope_work"/>
+                        <span t-esc="o.sale_id.validity"/>
                     </div>
                     <div style="width:100%;">
                         <h4><u> PAYMENT TERMS(please refer the payment and collection)</u></h4>
