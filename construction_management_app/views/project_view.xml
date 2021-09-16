@@ -332,6 +332,41 @@
             </field>
         </record>
 
+        <record id="account_move_invoice_form_inherit_project_cons" model="ir.ui.view">
+            <field name="name">account.move.construction</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_user_id']" position="before">
+                    <field name="sales_person"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_invoice_report_search_inherit_project_cons" model="ir.ui.view">
+            <field name="name">account.invoice.report.construction</field>
+            <field name="model">account.invoice.report</field>
+            <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_user_id']" position="after">
+                    <field name="sales_person"/>
+                </xpath>
+            </field>
+
+        </record>
+
+        <record id="hr_employee_view_form_inherit_timesheet_project_cons" model="ir.ui.view">
+            <field name="name">hr.employee.construction</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_timesheet.hr_employee_view_form_inherit_timesheet"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group[@name='timesheet']" position="inside">
+                        <field name="monthly_target"/>
+                </xpath>
+            </field>
+        </record>
+
+
 
         <record id="view_company_form_inherit" model="ir.ui.view">
             <field name="name">res.company.form.view.inherit</field>

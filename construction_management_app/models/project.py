@@ -441,6 +441,7 @@ class SaleOrder(models.Model):
             'invoice_user_id': self.user_id and self.user_id.id,
             'team_id': self.team_id.id,
             'partner_id': self.partner_invoice_id.id,
+            'sales_person': self.sales_person.id,
             'partner_shipping_id': self.partner_shipping_id.id,
             'invoice_partner_bank_id': self.company_id.partner_id.bank_ids[:1].id,
             'fiscal_position_id': self.fiscal_position_id.id or self.partner_invoice_id.property_account_position_id.id,
@@ -518,5 +519,76 @@ class AccountAnalyticLine(models.Model):
                 rec.price_unit = rec.employee_id.timesheet_cost
                 rec.total_price = rec.price_unit * rec.unit_amount
 
+
+class AccountMove(models.Model):
+    _inherit = 'account.move'
+
+    sales_person = fields.Many2one('hr.employee', string="Sales Person")
+
+    invoice_user_id = fields.Many2one('res.users',copy=False,tracking=True,
+                                      string='Sales User',
+                                      default=lambda self: self.env.user)
+    monthly_target = fields.Float(string="Monthly Target", related='sales_person.monthly_target', store=True)
+
+
+
+class SaleAdvancePaymentInv(models.TransientModel):
+    _inherit = "sale.advance.payment.inv"
+    
+    def _prepare_invoice_values(self, order, name, amount, so_line):
+        invoice_vals = {
+            'ref': order.client_order_ref,
+            'type': 'out_invoice',
+            'invoice_origin': order.name,
+            'invoice_user_id': order.user_id.id,
+            'narration': order.note,
+            'partner_id': order.partner_invoice_id.id,
+            'fiscal_position_id': order.fiscal_position_id.id or order.partner_id.property_account_position_id.id,
+            'partner_shipping_id': order.partner_shipping_id.id,
+            'currency_id': order.pricelist_id.currency_id.id,
+            'invoice_payment_ref': order.reference,
+            'invoice_payment_term_id': order.payment_term_id.id,
+            'invoice_partner_bank_id': order.company_id.partner_id.bank_ids[:1].id,
+            'team_id': order.team_id.id,
+            'campaign_id': order.campaign_id.id,
+            'medium_id': order.medium_id.id,
+            'source_id': order.source_id.id,
+            'sales_person': order.sales_person.id,
+            'invoice_line_ids': [(0, 0, {
+                'name': name,
+                'price_unit': amount,
+                'quantity': 1.0,
+                'product_id': self.product_id.id,
+                'product_uom_id': so_line.product_uom.id,
+                'tax_ids': [(6, 0, so_line.tax_id.ids)],
+                'sale_line_ids': [(6, 0, [so_line.id])],
+                'analytic_tag_ids': [(6, 0, so_line.analytic_tag_ids.ids)],
+                'analytic_account_id': order.analytic_account_id.id or False,
+            })],
+        }
+
+        return invoice_vals
+
+class AccountInvoiceReport(models.Model):
+    _inherit = "account.invoice.report"
+
+    invoice_user_id = fields.Many2one('res.users',string='Sales User',readonly=True)
+    sales_person = fields.Many2one('hr.employee', string="Sales Person")
+    monthly_target = fields.Float(string="Monthly Target", related='sales_person.monthly_target', store=True)
+
+
+    _depends = {
+        'account.move': ['sales_person']}
+
+    def _select(self):
+        return super(AccountInvoiceReport, self)._select() + ", move.sales_person as sales_person, move.monthly_target"
+
+    def _group_by(self):
+        return super(AccountInvoiceReport, self)._group_by() + ", move.sales_person, move.monthly_target"
+
+
+class HrEmployee(models.Model):
+    _inherit = 'hr.employee'
+    monthly_target = fields.Float(string="Monthly Target")
 
 
