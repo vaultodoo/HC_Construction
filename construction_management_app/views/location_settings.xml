@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="location_settings_form" model="ir.ui.view">
+        <field name="name">location.settings.form</field>
+        <field name="model">location.settings</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="location_id" required="1"/>
+                        <field name="dest_location_id" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="location_settings_tree" model="ir.ui.view">
+        <field name="name">location.settings.tree</field>
+        <field name="model">location.settings</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="location_id"/>
+                <field name="dest_location_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_location_settings" model="ir.actions.act_window">
+        <field name="name">Location Settings</field>
+        <field name="res_model">location.settings</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_construction_location_settings" name="Location Settings" parent="menu_const_configuration" action="action_location_settings" sequence="15"/>
+</odoo>

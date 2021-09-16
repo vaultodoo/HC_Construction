@@ -10,20 +10,139 @@
                         </t>
                     </div>
                 </div>
-                <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
+                <div class="page">
                     <br/>
-                    <div style="margin-top:75px;"/>
-                    <div class="page">
-                        <h5 style="text-align:left;width:100%;"><b><u><span style="width:50%;">To: <span t-esc="o.sale_id.partner_id.name"/></span>     <span style="width:50%;">From:<span t-esc="o.company_id.name"/></span> </u></b></h5>
-                        <br/>
-                        <h5 style="text-align:left;width:100%;"><b><u><span style="width:33%;">Tel: <span t-esc="o.sale_id.partner_id.phone"/></span>     Fax:<span t-esc="o.sale_id.partner_id.mobile"/>      Date:<span t-esc="o.date"/> </u></b></h5>
-                        <br/>
-                        <h5 style="text-align:left;width:100%;"><b><u>Attn: <span t-esc="o.attention"/>     Ref:<span t-esc="o.sale_id.name"/> </u></b></h5>
+                    <div style="width:100%; font-size:18px;font-weight:bold">
+                        <div style="width:10%;border-bottom:1px solid black;float:left">To:</div> <div style="width:40%;border-bottom:1px solid black;float:left;"><span t-esc="o.sale_id.partner_id.name" style="text-align:left;"/></div>
+                        <div style="width:10%;border-bottom:1px solid black;text-align:left;float:left">From:</div>
+                        <div style="width:40%;border-bottom:1px solid black;text-align:left;float:left;"><span t-esc="o.company_id.name" style="text-align:left;"/></div>
                     </div>
+                    <br/>
+                    <div style="width:100%; font-size:18px;font-weight:bold;margin-top:15px;">
+                        <div style="width:10%;border-bottom:1px solid black;text-align:left;float:left;">Tel:</div>
+                        <div style="width:25%;border-bottom:1px solid black;float:left;"><span t-esc="o.sale_id.partner_id.phone" style="text-align:left;"/></div>
+                        <div style="width:10%;border-bottom:1px solid black;text-align:left;float:left;">Fax:</div>
+                        <div style="width:25%;border-bottom:1px solid black;text-align:left;float:left;"><span t-esc="o.sale_id.partner_id.mobile" style="text-align:left;"/></div>
+                        <div style="width:10%;border-bottom:1px solid black;text-align:left;float:left;">Date:</div>
+                        <div style="width:20%;border-bottom:1px solid black;text-align:left;float:left;"><span t-esc="o.date" style="text-align:left;"/></div>
+                    </div>
+                    <br/>
+                    <div style="width:100%; font-size:18px;font-weight:bold;margin-top:15px;">
+                        <div style="width:10%;border-bottom:1px solid black;float:left">Attn:</div>
+                        <div style="width:40%;border-bottom:1px solid black;float:left;"><span t-esc="o.attention" style="text-align:left;"/></div>
+                        <div style="width:10%;border-bottom:1px solid black;text-align:left;float:left">Ref:</div>
+                        <div style="width:40%;border-bottom:1px solid black;text-align:left;float:left;"><span t-esc="o.sale_id.name" style="text-align:left;"/></div>
+                    </div>
+                    <br/>
+                    <div style="width:100%; font-size:18px;font-weight:bold;margin-top:15px;">
+                        <div style="width:20%;border-bottom:1px solid black;float:left">Project:</div>
+                        <div style="width:80%;border-bottom:1px solid black;float:left;"><span t-esc="o.sale_id.project_name" style="text-align:left;"/></div>
+                    </div>
+                    <br/>
+                    <div style="width:100%; font-size:18px;font-weight:bold;margin-top:15px;">
+                        <div style="width:20%;border-bottom:1px solid black;float:left">Subject:</div>
+                        <div style="width:80%;border-bottom:1px solid black;float:left;"><span t-esc="o.subject" style="text-align:left;"/></div>
+                    </div>
+                    <br/>
+                    <div style="width:100%;">
+                        <span style="text-align:left;font-size:16px;" t-raw="o.nature_work"/>
+                    </div>
+                    <br/>
+                    <div style="width:100%;">
+                        <h3><u> Scope Of Work</u></h3>
+                        <span t-esc="o.scope_work"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h3><u> Wet Area</u></h3>
+                        <span t-esc="o.special_note"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u><i>Note: All required documents like submittals, samples and drawings, and approvals from consultant/client/ any other authority should be taken prior to start the work. (VAT will be applicable)</i></u></h4>
+
+                    </div>
+                    <p style="page-break-after:always;"/>
+                    <div style="width:100%;">
+                        <h4><u><i>EXCLUSIONS:</i></u><i>(To be provided by the main contractor)</i></h4>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Secured storage area for our material</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Safe access to the work area (Ladders, scaffolding) etc.</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Hoisting of material to the work area as required</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Electricity 3 phase 45 K.W</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Water test by main contractor and inspection by Al Mayas</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   A/C, Water tank foundation and any other civil work by main contractor</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Free access for concrete pump and mixer to the site by main contractor</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Any permission, if necessary from authority like RTA/Municipality by Main Contractor</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Cement and sand for ridges and angle fillet provided by main contractor</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Building expansion joints are not included in our scope of work</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Any damage to the completed/tested waterproofing by others to be notified to us immediately</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>*   Foundation less than one meter square shall not be deducted for the quantity taken at site</i></p>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u><i>Special Note:</i></u></h4>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>1)  Nobody allowed to work on the roof after PU application and the entrance and the roof shall be closed until screed concrete is over.</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>2)  After PU and Screed no drilling any type of breaking the concrete is not allowed and any damage of PU the main contractor shall be held responsible and pay for the repair.</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>3)  Any delay in payment as agreed, Al Mayas reserve the right to hold the work until the payment is cleared.</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>4)  Any damage after PU application repair charge will be applicable.</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>5)  Concrete shall be done using 42m pump. Any additional facility required shall be provided by the main contractor.</i></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><i>6)  No part-job shall be done in one roof.</i></p>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u>GUARANTEE</u></h4>
+                        <span t-esc="o.guarantee"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u> CONTRACT</u></h4>
+                        <span t-esc="o.contract"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u> VALIDITY OF QUOTATION</u></h4>
+                        <span t-esc="o.scope_work"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u> PAYMENT TERMS(please refer the payment and collection)</u></h4>
+                        <span t-esc="o.sale_id.payment_term_id.name"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4><u> COMMENCEMENT</u></h4>
+                        <span t-esc="o.commencement"/>
+                    </div>
+                    <div style="width:100%;">
+                        <p style="margin-top: 0;margin-bottom:0;"><b><span t-esc="o.sale_id.sales_person.name"/> </b></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><span t-esc="o.sale_id.sales_person.work_phone"/></p>
+                        <p style="margin-top: 0;margin-bottom:0;"><b><i>For Al Mayas Insulation<br/>(DCL &amp; Ministry of Public Works &amp; trakhees approved company)</i></b></p>
+                        <p style="text-align:right;"><i>Verified By</i></p>
+                    </div>
+
+
+
+
+
                 </div>
+                <div class="footer" style="font-size:16px;border-top:1px solid black;">
+                    <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
+                        Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
+                </div>
+
             </t>
         </t>
     </template>
+
+
+    <record id="quotation_paper_format" model="report.paperformat">
+        <field name="name">European A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">25</field>
+        <field name="dpi">90</field>
+    </record>
+
 
     <report
             string="Quotation"
@@ -32,6 +151,6 @@
             name="construction_management_app.sales_project_quotation_report_template"
             file="construction_management_app.sales_project_quotation_report_template"
             report_type="qweb-pdf"
-            paperformat="construction_management_app.water_proofing_paper_format"/>
+            paperformat="construction_management_app.quotation_paper_format"/>
 
 </odoo>

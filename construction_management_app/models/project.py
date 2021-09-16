@@ -143,6 +143,9 @@ class ProjectProject(models.Model):
     @api.model
     def create(self,vals):
         rtn = super(ProjectProject,self).create(vals)
+        location_settings = self.env['location.settings'].search([],limit=1)
+        rtn.source_location_id = location_settings.location_id.id
+        rtn.dest_location_id = location_settings.dest_location_id.id
         stage_obj = self.env['project.task.type']
         stage_ids = stage_obj.search([('set_default', '=', True)])
 
