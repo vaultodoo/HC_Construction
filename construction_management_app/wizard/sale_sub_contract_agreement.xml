@@ -11,6 +11,9 @@
                         <field name="client"/>
                         <field name="consultant"/>
                         <field name="contact"/>
+                        <field name="guarantee"/>
+                        <field name="contract"/>
+                        <field name="commencement"/>
                         <field name="nature_work"/>
                     </group>
                 </sheet>

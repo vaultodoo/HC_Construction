@@ -13,6 +13,20 @@
                     </div>
                     <div t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id" class="article">
                         <div class="page">
+<!--                            <div style="width:60%;border: 2px solid black; height:250px;display:block;float:left;">-->
+<!--                                <div style="text-align:center;"><b><u>Project Overview Report</u></b></div>-->
+<!--                                <div>-->
+<!--                                <div style="width:20%;float:left;font-size:14px;padding:5px 5px;">PROJECT </div>-->
+<!--                                <div style="width:80%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.name"/> </div>-->
+<!--                                </div>-->
+<!--                                <br/>-->
+<!--                                <div style="width:25%;float:left;font-size:14px;padding:5px 5px;">CONTRACTOR </div>-->
+<!--                                <div style="width:75%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.partner_id.name"/> </div>-->
+<!--                            </div>-->
+<!--                            <div style="width:40%;border: 2px solid black; height:250px;display:block;float:right;">-->
+
+<!--                            </div>-->
+
                             <div>
                                 <h3>
                                     <strong><span t-field="doc.name"/></strong>

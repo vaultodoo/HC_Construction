@@ -8,58 +8,74 @@
                         <t t-if="o.company_id.certificate_header">
                             <img style="width:100%;z-index:600;height: 100px;" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.certificate_header)"/>
                         </t>
+
                     </div>
                 </div>
                 <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
-                    <div class="page" style="text-align:center;">
+                    <style>
+                        #customers {
+                        font-family: Arial, Helvetica, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                        font-size:13px;
+                        }
+
+                        #customers td, #customers th {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        }
+
+                        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+                        #customers tr:hover {background-color: #ddd;}
+
+                        #customers th {
+                        padding-top: 12px;
+                        padding-bottom: 12px;
+                        text-align: left;
+                        background-color: #04AA6D;
+                        color: white;
+                        }
+                    </style>
+                    <div class="page" style="text-align:left;">
                         <br/>
-                        <div style="margin-top:75px;"/>
-                        <h5 style="text-align:center;"><b><u><i>GUARANTEE CERTIFICATE</i></u></b></h5><br/>
-                        <table style="width:100%;font-size:16px;">
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>NAME OF THE CLIENT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.client"/> </strong></td>
-                            </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>PROJECT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
-                            </tr>
+                        <div style="margin-top:95px;"/>
+                        <h4 style="text-align:center;">GUARANTEE CERTIFICATE</h4>
+                        <hr></hr>
 
-
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>MAIN CONTRACTOR</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
+                        <table id="customers">
+                            <tr>
+                                <td>NAME OF THE CLIENT</td>
+                                <td><b><span t-esc="o.client"/></b></td>
                             </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>CONSULTANT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.consultant"/> </strong></td>
+                            <tr>
+                                <td>PROJECT</td>
+                                <td><b><span t-esc="o.project_id.name"/></b></td>
                             </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>SYSTEM APPLIED</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.construction_type.name"/> </strong></td>
+                            <tr>
+                                <td>MAIN CONTRACTOR</td>
+                                <td><b><span t-esc="o.project_id.partner_id.name"/></b></td>
                             </tr>
-
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>GUARANTEE PERIOD</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.guarantee_period"/> </strong></td>
+                            <tr>
+                                <td>CONSULTANT</td>
+                                <td><b><span t-esc="o.consultant"/></b></td>
                             </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>COMMENCING</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.date"/> </strong></td>
+                            <tr>
+                                <td>SYSTEM APPLIED</td>
+                                <td><b><span t-esc="o.project_id.construction_type.name"/></b></td>
                             </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>EXPIRING</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.expiring"/> </strong></td>
+                            <tr>
+                                <td>GUARANTEE PERIOD</td>
+                                <td><b><span t-esc="o.guarantee_period"/></b></td>
                             </tr>
-
+                            <tr>
+                                <td>COMMENCING</td>
+                                <td><b><span t-esc="o.date"/></b></td>
+                            </tr>
+                            <tr>
+                                <td>EXPIRING</td>
+                                <td><b><span t-esc="o.expiring"/></b></td>
+                            </tr>
                         </table>
                         <br/>
                         <span>
@@ -72,7 +88,7 @@
                         <br/>
                     </div>
                 </div>
-                <div class="footer" style="font-size:16px;border-top:1px solid black;">
+                <div class="footer" style="font-size:16px;border-top:1px solid black;text-align:center;">
                     <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
                         Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
                 </div>

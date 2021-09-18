@@ -10,6 +10,9 @@ class SaleSubContractAgreement(models.TransientModel):
     consultant = fields.Text(string="Consultant")
     contact = fields.Text(string="Contact")
     nature_work = fields.Html(string="Nature of work")
+    guarantee = fields.Text(string="Guarantee")
+    commencement = fields.Text(string="Commencement")
+    contract = fields.Text(string="Contract")
     sale_id = fields.Many2one('sale.order', default=lambda self: self._context.get('active_id', False))
     company_id = fields.Many2one('res.company', 'Company', default=lambda self: self.env.company)
 
