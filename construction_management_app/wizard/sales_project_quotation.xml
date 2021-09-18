@@ -11,11 +11,13 @@
                         <field name="attention"/>
                         <field name="subject"/>
                         <field name="scope_work"/>
-                        <field name="special_note"/>
+                        <field name="wet_area"/>
                         <field name="guarantee"/>
                         <field name="contract"/>
                         <field name="commencement"/>
                         <field name="nature_work"/>
+                        <field name="exclusions"/>
+                        <field name="special_notes"/>
                     </group>
                 </sheet>
                 <footer>

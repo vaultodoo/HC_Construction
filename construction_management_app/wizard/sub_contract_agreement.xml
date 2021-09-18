@@ -11,7 +11,12 @@
                         <field name="client"/>
                         <field name="consultant"/>
                         <field name="contact"/>
+                        <field name="guarantee"/>
+                        <field name="contract"/>
+                        <field name="commencement"/>
                         <field name="nature_work"/>
+                        <field name="exclusions"/>
+                        <field name="special_notes"/>
                     </group>
                 </sheet>
                 <footer>

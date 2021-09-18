@@ -10,52 +10,95 @@
                         </t>
                     </div>
                 </div>
-                <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" class="article">
-                <div class="page" style="text-align:center;">
-                    <br/>
+                    <div class="page" style="text-align:center;">
+                        <br/>
                         <div style="margin-top:75px;"/>
-                    <h6 style="text-align:left;width:100%;"><b>SCA Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </b></h6>
-                    <h2 style="text-align:center;"><u>Sub Contract Agreement</u></h2><br/>
-                    <h5><i><u><strong>The Sub Contract Agreement between <span t-esc="o.project_id.partner_id.name"/> Tel:<span t-esc="o.company_id.phone"/> Fax: <span t-esc="o.company_id.phone"/>
-                        (First Party) and <span t-esc="o.company_id.name"/> (second party) is hereby agreed scope of work and payment terms as follows and signed this agreement, dated <span t-esc="time.strftime('%d-%B-%Y')"/></strong></u></i></h5>
-                    <i><table style="width:100%;font-size:16px;">
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>CONTRACTOR</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>OWNER/CLIENT</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.client"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>CONSULTANT</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.consultant"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>PROJECT</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
-                        </tr>
-                        <tr style="width:100%;">
-                            <td style="width:45%"><strong>CONTACT</strong></td>
-                            <td style="width:10%"><strong>:</strong></td>
-                            <td style="width:45%"><strong><span t-esc="o.contact"/> </strong></td>
-                        </tr>
-                    </table></i>
-                    <br/>
-                    <span>
-                        <span style="text-align:left;font-size:16px;" t-raw="o.nature_work"/>
-                    </span>
-                    <div style="width:100%;text-align:left;font-size:16px;"><strong><span>
-                        <i>Note: all required documents like submittals, samples, drawings, and approvals from consultant/client/any other authority should be taken prior to start the work.</i>
-                    </span></strong>
+                        <h6 style="text-align:left;width:100%;"><b>SCA Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </b></h6>
+                        <h2 style="text-align:center;"><u>Sub Contract Agreement</u></h2><br/>
+                        <h5><i><u><strong>The Sub Contract Agreement between <span t-esc="o.project_id.partner_id.name"/> Tel:<span t-esc="o.company_id.phone"/> Fax: <span t-esc="o.company_id.phone"/>
+                            (First Party) and <span t-esc="o.company_id.name"/> (second party) is hereby agreed scope of work and payment terms as follows and signed this agreement, dated <span t-esc="time.strftime('%d-%B-%Y')"/></strong></u></i></h5>
+                        <i><table style="width:100%;font-size:16px;">
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>CONTRACTOR</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>OWNER/CLIENT</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.client"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>CONSULTANT</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.consultant"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>PROJECT</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
+                            </tr>
+                            <tr style="width:100%;">
+                                <td style="width:45%"><strong>CONTACT</strong></td>
+                                <td style="width:10%"><strong>:</strong></td>
+                                <td style="width:45%"><strong><span t-esc="o.contact"/> </strong></td>
+                            </tr>
+                        </table></i>
+                        <br/>
+                        <span>
+                            <span style="text-align:left;font-size:16px;" t-raw="o.nature_work"/>
+                        </span>
+                        <div style="width:100%;text-align:left;font-size:16px;"><strong><span>
+                            <i>Note: all required documents like submittals, samples, drawings, and approvals from consultant/client/any other authority should be taken prior to start the work.</i>
+                        </span></strong>
+                        </div>
+                        <p style="page-break-after:always;"/>
+                        <div style="width:100%;">
+                            <h4><u><i>EXCLUSIONS:</i></u><i>(To be provided by the main contractor)</i></h4>
+                            <span style="text-align:left" t-raw="o.exclusions"/>
+                        </div>
+                        <div style="width:100%;">
+                            <h4><u><i>Special Note:</i></u></h4>
+                            <span style="text-align:left" t-raw="o.special_notes"/>
+                        </div>
+                        <div style="width:100%;">
+                            <h4><u>GUARANTEE</u></h4>
+                            <span t-esc="o.guarantee"/>
+                        </div>
+                        <div style="width:100%;">
+                            <h4><u> CONTRACT</u></h4>
+                            <span t-esc="o.contract"/>
+                        </div>
+                        <div style="width:100%;">
+                            <h4><u> VALIDITY OF QUOTATION</u></h4>
+                            <span t-esc="o.project_id.sale_order_id.validity"/>
+                        </div>
+                        <div style="width:100%;">
+                            <h4><u> PAYMENT TERMS(please refer the payment and collection)</u></h4>
+                            <span t-esc="o.project_id.sale_order_id.payment_term_id.name"/>
+                        </div>
+                        <div style="width:100%;">
+                            <h4><u> COMMENCEMENT</u></h4>
+                            <span t-esc="o.commencement"/>
+                            <span><i><u>Note: for all your work progress enquiries &amp; information please call FELIX-050 184 9071</u></i></span>
+                        </div>
+                        <div style="width:100%;">
+                            <div style="width:50%; float:left;">
+                                <p><i>Main Contractor(First Party)</i></p>
+                                <p><strong><span t-esc="o.project_id.sale_order_id.partner_id.name"/> </strong></p>
+                                <p><i>Signature:</i></p>
+                                <p><i>Date:</i></p>
+
+                            </div>
+                            <div style="width:50%; float:right;">
+                                <p><i>Sub Contractor(Second Party)</i></p>
+                                <p><strong><span t-esc="o.company_id.name"/> </strong></p>
+                                <p><i>Signature:</i></p>
+                                <p><i>Date:</i></p>
+
+                            </div>
+                        </div>
                     </div>
-                    <br/>
-                </div>
-                </div>
                 <div class="footer" style="font-size:16px;border-top:1px solid black;">
                     <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
                         Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
@@ -73,8 +116,6 @@
             name="construction_management_app.sub_contract_agreement_report_template"
             file="construction_management_app.sub_contract_agreement_report_template"
             report_type="qweb-pdf"
-            attachment_use="True"
-            attachment="'Subcontract Agreement' + '.pdf'"
             paperformat="construction_management_app.water_proofing_paper_format"/>
 
 

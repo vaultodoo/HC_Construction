@@ -13,6 +13,8 @@ class SaleSubContractAgreement(models.TransientModel):
     guarantee = fields.Text(string="Guarantee")
     commencement = fields.Text(string="Commencement")
     contract = fields.Text(string="Contract")
+    exclusions = fields.Html()
+    special_notes = fields.Html()
     sale_id = fields.Many2one('sale.order', default=lambda self: self._context.get('active_id', False))
     company_id = fields.Many2one('res.company', 'Company', default=lambda self: self.env.company)
 
