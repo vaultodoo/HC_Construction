@@ -114,8 +114,8 @@ class ProjectProject(models.Model):
                 rec.total_material_cost = material
                 rec.total_labour_cost = employee_cost
             total_cost = rec.total_labour_cost + rec.total_material_cost
-            rec.profit_amount = rec.total_sale_cost - total_cost
-            rec.profit_percent = (rec.profit_amount/rec.total_sale_cost)*100 if rec.total_sale_cost else 0.0
+            rec.profit_amount = rec.untaxed_sale_cost - total_cost
+            rec.profit_percent = (rec.profit_amount/rec.untaxed_sale_cost)*100 if rec.untaxed_sale_cost else 0.0
             rec.planned_labour_cost = sum(rec.project_labour_plan_ids.mapped('total_cost'))
             rec.planned_material_cost = sum(rec.project_material_plan_ids.mapped('total_cost'))
             rec.other_expenses = sum(rec.other_expenses_ids.mapped('cost'))

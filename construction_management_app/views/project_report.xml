@@ -46,7 +46,7 @@
                                     </div>
                                     <div>
                                         <div style="width:50%;float:left;font-size:14px;padding:5px 5px;"><b>Actual Order Value(AED)</b> </div>
-                                        <div style="width:50%;float:right;font-size:14px;padding:5px 5px;"><b><span t-esc="doc.total_sale_cost"/></b></div>
+                                        <div style="width:50%;float:right;font-size:14px;padding:5px 5px;"><b><span t-esc="doc.untaxed_sale_cost"/></b></div>
                                     </div>
                                     <div style="width:100%;">
                                         <table style="width:100%;">

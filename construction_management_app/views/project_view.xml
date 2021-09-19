@@ -84,14 +84,14 @@
                     <page string="Analysis" name="project_details">
                         <group>
                             <group>
-                                <field name="total_sale_cost"/>
-                                <field name="untaxed_sale_cost"/>
+                                <field name="total_sale_cost" invisible="1"/>
+                                <field name="untaxed_sale_cost" string="Total Sale Cost"/>
                                 <field name="profit_amount"/>
                                 <field name="profit_percent"/>
                             </group>
                             <group>
-                                <field name="planned_material_cost"/>
-                                <field name="planned_labour_cost"/>
+                                <field name="planned_material_cost" invisible="1"/>
+                                <field name="planned_labour_cost" invisible="1"/>
                                 <field name="total_material_cost"/>
                                 <field name="total_labour_cost"/>
                             </group>
