@@ -17,6 +17,11 @@ class LocationSettings(models.Model):
         required=False,
         copy=True,
     )
+    custom_picking_type_id = fields.Many2one(
+        'stock.picking.type',
+        string='Picking Type',
+        copy=False,tracking=True
+    )
 
     @api.depends('location_id', 'dest_location_id')
     def get_name(self):

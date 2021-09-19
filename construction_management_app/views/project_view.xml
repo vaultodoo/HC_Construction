@@ -81,14 +81,17 @@
                             </page>
                         </notebook>
                     </page>
-                    <page string="Project Details" name="project_details">
+                    <page string="Analysis" name="project_details">
                         <group>
                             <group>
                                 <field name="total_sale_cost"/>
+                                <field name="untaxed_sale_cost"/>
                                 <field name="profit_amount"/>
                                 <field name="profit_percent"/>
                             </group>
                             <group>
+                                <field name="planned_material_cost"/>
+                                <field name="planned_labour_cost"/>
                                 <field name="total_material_cost"/>
                                 <field name="total_labour_cost"/>
                             </group>
@@ -101,6 +104,7 @@
                         </field>
                         <group>
                             <group>
+                                <field name="other_expenses"/>
                                 <field name="final_profit_amount"/>
                             </group>
                         </group>
@@ -145,6 +149,9 @@
                             <field name="construction_type"/>
                             <!--                            <field name="location_id" context="{'search_default_customer':1, 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>-->
                             <field name="location"/>
+                            <field name="project_start_date"/>
+                            <field name="project_end_date"/>
+                            <field name="working_days"/>
                         </group>
 
                     </group>
@@ -319,6 +326,21 @@
             </field>
         </record>
 
+        <record id="sale_order_search_project_inherit" model="ir.ui.view">
+            <field name="name">sale.order.project.search.view.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="replace">
+                    <field name="sales_person"/>
+                </xpath>
+                <xpath expr="//filter[@name='salesperson']" position="replace">
+                    <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'sales_person'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
         <record id="sale_order_timesheet_form_project_inherit" model="ir.ui.view">
             <field name="name">sale.order.timesheet.project.view.inherit</field>
             <field name="model">sale.order</field>
@@ -343,6 +365,21 @@
             </field>
         </record>
 
+         <record id="account_move_invoice_search_inherit_project_cons" model="ir.ui.view">
+            <field name="name">account.move.search.construction</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_user_id']" position="replace">
+                    <field name="sales_person" string="Salesperson"/>
+                </xpath>
+                                <xpath expr="//filter[@name='salesperson']" position="replace">
+                    <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'sales_person'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
         <record id="view_account_invoice_report_search_inherit_project_cons" model="ir.ui.view">
             <field name="name">account.invoice.report.construction</field>
             <field name="model">account.invoice.report</field>
@@ -361,7 +398,7 @@
             <field name="inherit_id" ref="hr_timesheet.hr_employee_view_form_inherit_timesheet"/>
             <field name="arch" type="xml">
                 <xpath expr="//group/group[@name='timesheet']" position="inside">
-                        <field name="monthly_target"/>
+                    <field name="monthly_target"/>
                 </xpath>
             </field>
         </record>

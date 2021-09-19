@@ -57,7 +57,7 @@ class ProjectProject(models.Model):
 
     project_phase_ids = fields.Many2many('project.phase.template', string="Project Phases",tracking=True)
     stage_allocated = fields.Boolean(tracking=True)
-    sales_person = fields.Many2one('res.users', string="Sales Person",tracking=True)
+    sales_person = fields.Many2one('res.users', string="User",tracking=True)
     s_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
     job_order = fields.Char(string="Job Order",tracking=True)
     plot_no = fields.Char(string="Plot No",tracking=True)
@@ -76,7 +76,11 @@ class ProjectProject(models.Model):
     proforma_paid = fields.Integer(compute='compute_proforma_count')
     proforma_pending = fields.Integer(compute='compute_proforma_count')
     total_sale_cost = fields.Float(compute='get_project_value')
+    untaxed_sale_cost = fields.Float(compute='get_project_value')
     total_material_cost = fields.Float(compute='get_project_value')
+    planned_material_cost = fields.Float(compute='get_project_value')
+    planned_labour_cost = fields.Float(compute='get_project_value')
+    other_expenses = fields.Float(compute='get_project_value')
     profit_amount = fields.Float(compute='get_project_value')
     profit_percent = fields.Float(compute='get_project_value')
     total_labour_cost = fields.Float(compute='get_project_value')
@@ -84,6 +88,9 @@ class ProjectProject(models.Model):
     final_profit_amount = fields.Float(compute='get_project_value')
     paid_invoice_amount = fields.Float(compute='get_invoice_amount')
     pending_invoice_amount = fields.Float(compute='get_invoice_amount')
+    project_start_date = fields.Date()
+    project_end_date = fields.Date()
+    working_days = fields.Char(string="No. of working days")
 
 
     def get_invoice_amount(self):
@@ -95,6 +102,7 @@ class ProjectProject(models.Model):
         for rec in self:
             if rec.sale_order_id:
                 rec.total_sale_cost = rec.sale_order_id.amount_total
+                rec.untaxed_sale_cost = rec.sale_order_id.amount_untaxed
             if rec.project_task_ids:
                 material = 0.0
                 employee_cost = 0.0
@@ -108,6 +116,9 @@ class ProjectProject(models.Model):
             total_cost = rec.total_labour_cost + rec.total_material_cost
             rec.profit_amount = rec.total_sale_cost - total_cost
             rec.profit_percent = (rec.profit_amount/rec.total_sale_cost)*100 if rec.total_sale_cost else 0.0
+            rec.planned_labour_cost = sum(rec.project_labour_plan_ids.mapped('total_cost'))
+            rec.planned_material_cost = sum(rec.project_material_plan_ids.mapped('total_cost'))
+            rec.other_expenses = sum(rec.other_expenses_ids.mapped('cost'))
             expense = 0.0
             if rec.other_expenses_ids:
                 expense = sum(rec.other_expenses_ids.mapped('cost'))
@@ -146,6 +157,7 @@ class ProjectProject(models.Model):
         location_settings = self.env['location.settings'].search([],limit=1)
         rtn.source_location_id = location_settings.location_id.id
         rtn.dest_location_id = location_settings.dest_location_id.id
+        rtn.custom_picking_type_id = location_settings.custom_picking_type_id.id
         stage_obj = self.env['project.task.type']
         stage_ids = stage_obj.search([('set_default', '=', True)])
 
@@ -296,8 +308,6 @@ class ProjectProject(models.Model):
                         tt.transfer_generated = 'yes'
                     if pick_to_backorder:
                         return pick_to_backorder.action_generate_backorder_wizard()
-                    return False
-
 
 
 class ProjectTaskType(models.Model):
@@ -369,6 +379,9 @@ class SaleOrder(models.Model):
     project_manager = fields.Many2one('res.users', string="Project Manager")
     sales_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
     validity = fields.Char(string="Validity")
+    user_id = fields.Many2one(
+        'res.users',string='User',index=True,tracking=2,default=lambda self: self.env.user,
+        domain=lambda self: [('groups_id','in',self.env.ref('sales_team.group_sale_salesman').id)])
 
     @api.onchange('contract_date', 'job_order', 'project_manager', 'sales_person')
     def onchange_sale_order_details(self):
@@ -480,13 +493,6 @@ class SaleOrderLine(models.Model):
             'user_id': self.order_id.project_manager.id
         }
 
-
-class AccountMove(models.Model):
-    _inherit = 'account.move'
-
-    sale_order_id = fields.Many2one('sale.order')
-
-
 class ConstructionType(models.Model):
     _name = 'construction.type'
 
@@ -523,13 +529,14 @@ class AccountAnalyticLine(models.Model):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    sale_order_id = fields.Many2one('sale.order')
+
     sales_person = fields.Many2one('hr.employee', string="Sales Person")
 
-    invoice_user_id = fields.Many2one('res.users',copy=False,tracking=True,
-                                      string='Sales User',
+    invoice_user_id = fields.Many2one('res.users', copy=False,tracking=True,
+                                      string='User',
                                       default=lambda self: self.env.user)
     monthly_target = fields.Float(string="Monthly Target", related='sales_person.monthly_target', store=True)
-
 
 
 class SaleAdvancePaymentInv(models.TransientModel):
@@ -572,7 +579,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
 class AccountInvoiceReport(models.Model):
     _inherit = "account.invoice.report"
 
-    invoice_user_id = fields.Many2one('res.users',string='Sales User',readonly=True)
+    invoice_user_id = fields.Many2one('res.users',string='User',readonly=True)
     sales_person = fields.Many2one('hr.employee', string="Sales Person")
     monthly_target = fields.Float(string="Monthly Target", related='sales_person.monthly_target', store=True)
 

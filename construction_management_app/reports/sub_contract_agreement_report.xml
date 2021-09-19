@@ -10,96 +10,184 @@
                         </t>
                     </div>
                 </div>
-                    <div class="page" style="text-align:center;">
-                        <br/>
-                        <div style="margin-top:75px;"/>
-                        <h6 style="text-align:left;width:100%;"><b>SCA Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </b></h6>
-                        <h2 style="text-align:center;"><u>Sub Contract Agreement</u></h2><br/>
-                        <h5><i><u><strong>The Sub Contract Agreement between <span t-esc="o.project_id.partner_id.name"/> Tel:<span t-esc="o.company_id.phone"/> Fax: <span t-esc="o.company_id.phone"/>
-                            (First Party) and <span t-esc="o.company_id.name"/> (second party) is hereby agreed scope of work and payment terms as follows and signed this agreement, dated <span t-esc="time.strftime('%d-%B-%Y')"/></strong></u></i></h5>
-                        <i><table style="width:100%;font-size:16px;">
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>CONTRACTOR</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.partner_id.name"/> </strong></td>
-                            </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>OWNER/CLIENT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.client"/> </strong></td>
-                            </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>CONSULTANT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.consultant"/> </strong></td>
-                            </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>PROJECT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
-                            </tr>
-                            <tr style="width:100%;">
-                                <td style="width:45%"><strong>CONTACT</strong></td>
-                                <td style="width:10%"><strong>:</strong></td>
-                                <td style="width:45%"><strong><span t-esc="o.contact"/> </strong></td>
-                            </tr>
-                        </table></i>
-                        <br/>
-                        <span>
-                            <span style="text-align:left;font-size:16px;" t-raw="o.nature_work"/>
-                        </span>
-                        <div style="width:100%;text-align:left;font-size:16px;"><strong><span>
-                            <i>Note: all required documents like submittals, samples, drawings, and approvals from consultant/client/any other authority should be taken prior to start the work.</i>
-                        </span></strong>
-                        </div>
-                        <p style="page-break-after:always;"/>
-                        <div style="width:100%;">
-                            <h4><u><i>EXCLUSIONS:</i></u><i>(To be provided by the main contractor)</i></h4>
-                            <span style="text-align:left" t-raw="o.exclusions"/>
-                        </div>
-                        <div style="width:100%;">
-                            <h4><u><i>Special Note:</i></u></h4>
-                            <span style="text-align:left" t-raw="o.special_notes"/>
-                        </div>
-                        <div style="width:100%;">
-                            <h4><u>GUARANTEE</u></h4>
-                            <span t-esc="o.guarantee"/>
-                        </div>
-                        <div style="width:100%;">
-                            <h4><u> CONTRACT</u></h4>
-                            <span t-esc="o.contract"/>
-                        </div>
-                        <div style="width:100%;">
-                            <h4><u> VALIDITY OF QUOTATION</u></h4>
-                            <span t-esc="o.project_id.sale_order_id.validity"/>
-                        </div>
-                        <div style="width:100%;">
-                            <h4><u> PAYMENT TERMS(please refer the payment and collection)</u></h4>
-                            <span t-esc="o.project_id.sale_order_id.payment_term_id.name"/>
-                        </div>
-                        <div style="width:100%;">
-                            <h4><u> COMMENCEMENT</u></h4>
-                            <span t-esc="o.commencement"/>
-                            <span><i><u>Note: for all your work progress enquiries &amp; information please call FELIX-050 184 9071</u></i></span>
-                        </div>
-                        <div style="width:100%;">
-                            <div style="width:50%; float:left;">
-                                <p><i>Main Contractor(First Party)</i></p>
-                                <p><strong><span t-esc="o.project_id.sale_order_id.partner_id.name"/> </strong></p>
-                                <p><i>Signature:</i></p>
-                                <p><i>Date:</i></p>
+                <div class="page" style="line-height: 1.6;">
+                    <style>
+                        #customers {
+                        font-family: Arial, Helvetica, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                        }
 
-                            </div>
-                            <div style="width:50%; float:right;">
-                                <p><i>Sub Contractor(Second Party)</i></p>
-                                <p><strong><span t-esc="o.company_id.name"/> </strong></p>
-                                <p><i>Signature:</i></p>
-                                <p><i>Date:</i></p>
+                        #customers td, #customers th {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        }
 
-                            </div>
+                        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+                        #customers tr:hover {background-color: #ddd;}
+
+                        #customers th {
+                        padding-top: 12px;
+                        padding-bottom: 12px;
+                        text-align: left;
+                        background-color: #FF6843;
+                        color: white;
+                        }
+                    </style>
+                    <h6 style="text-align:left;width:100%;"><b>SCA Ref.No : <span t-esc="o.project_id.sale_order_id.name"/> </b></h6>
+                    <h2 style="text-align:center;">SUB CONTRACT AGREEMENT</h2>
+                    <hr></hr>
+                    <h4>The Sub Contract Agreement between <span t-esc="o.project_id.sale_order_id.partner_id.name"/> Tel:<span t-esc="o.company_id.phone"/> Fax: <span t-esc="o.company_id.phone"/>
+                        (First Party) and <span t-esc="o.company_id.name"/> (second party) is hereby agreed scope of work and payment terms as follows and signed this agreement, dated <span t-esc="time.strftime('%d-%B-%Y')"/></h4>
+                    <i><table style="width:100%;font-size:16px;">
+                        <tr style="width:100%;">
+                            <td style="width:45%">CONTRACTOR</td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.project_id.sale_order_id.partner_id.name"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%">OWNER/CLIENT</td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.client"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%">CONSULTANT</td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.consultant"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%">PROJECT</td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.project_id.name"/> </strong></td>
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:45%">CONTACT</td>
+                            <td style="width:10%"><strong>:</strong></td>
+                            <td style="width:45%"><strong><span t-esc="o.contact"/> </strong></td>
+                        </tr>
+                    </table></i>
+                    <br/>
+                    <span>
+                        <span style="text-align:left;font-size:16px;" t-raw="o.nature_work"/>
+                    </span>
+                    <br/>
+                    <table id="customers">
+                        <tr>
+                            <th/>
+                            <th>Approx m<sup>2</sup></th>
+                            <th>AED/m<sup>2</sup></th>
+                            <th>AED</th>
+                        </tr>
+                        <tr t-foreach="o.project_id.sale_order_id.order_line" t-as="order">
+                            <td><span t-esc="order.name"/> </td>
+                            <td><span t-esc="order.product_uom_qty"/> </td>
+                            <td><span t-esc="order.price_unit"/> </td>
+                            <td><span t-esc="order.price_subtotal"/> </td>
+                        </tr>
+                        <tr>
+                            <th>VAT 5%</th>
+                            <td/>
+                            <td/>
+                            <td><span t-esc="o.project_id.sale_order_id.amount_tax"/></td>
+                        </tr>
+
+                        <tr>
+                            <th>Total</th>
+                            <td/>
+                            <td/>
+                            <td><span t-esc="o.project_id.sale_order_id.amount_total"/></td>
+                        </tr>
+                    </table>
+                    <div class="breakout" style="float: none;
+    clear: both;
+    position: relative;
+    margin: 50px auto;
+    border: 1px solid #bee1f3;
+    background: #F8FDFE;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 0 30px 10px 30px;
+    font-size: 0.8em;">
+                        <h3>Note :</h3>
+                        <p>All required documents like submittals, samples, drawings, and approvals from consultant/client/any other authority should be taken prior to start the work.</p>
+                    </div>
+
+                    <p style="page-break-after:always;"/>
+                    <div style="width:100%;">
+                        <h3 style="padding-bottom: 0.1rem;border-bottom: 0.1rem solid #FF6843;">EXCLUSIONS: (To be provided by the main contractor)</h3>
+                        <span style="text-align:left" t-raw="o.exclusions"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h3 style="padding-bottom: 0.5rem;border-bottom: 0.1rem solid #FF6843;">Special Note:</h3>
+                        <span style="text-align:left" t-raw="o.special_notes"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4 style="padding-bottom: 0.5rem;border-bottom: 0.1rem solid #FF6843;">GUARANTEE</h4>
+                        <span t-esc="o.guarantee"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4 style="padding-bottom: 0.5rem;border-bottom: 0.1rem solid #FF6843;">CONTRACT</h4>
+                        <span t-esc="o.contract"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4 style="padding-bottom: 0.5rem;border-bottom: 0.1rem solid #FF6843;">VALIDITY OF QUOTATION</h4>
+                        <span t-esc="o.project_id.sale_order_id.validity"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4 style="padding-bottom: 0.5rem;border-bottom: 0.1rem solid #FF6843;">PAYMENT TERMS (please refer the payment and collection)</h4>
+                        <span t-esc="o.project_id.sale_order_id.payment_term_id.name"/>
+                    </div>
+                    <div style="width:100%;">
+                        <h4 style="padding-bottom: 0.5rem;border-bottom: 0.1rem solid #FF6843;">COMMENCEMENT</h4>
+                        <span t-esc="o.commencement"/>
+
+
+                        <div class="breakout" style="float: none;
+    clear: both;
+    position: relative;
+    margin: 50px auto;
+    border: 1px solid #bee1f3;
+    background: #F8FDFE;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 0 30px 10px 30px;
+    font-size: 0.8em;">
+                            <h3>Note :</h3>
+                            <p>for all your work progress enquiries &amp; information please call FELIX-050 184 9071</p>
+                        </div>
+
+
+                    </div>
+
+
+                    <div style="width:100%;">
+                        <div style="float:left;">
+                            <p><i>Main Contractor(First Party)</i></p>
+                            <p><strong><span t-esc="o.project_id.sale_order_id.partner_id.name"/> </strong></p>
+                            <p><i>Signature:</i></p>
+                            <br/>
+                            <p><i>Date:</i></p>
+
+                        </div>
+                        <div style="float:right;">
+                            <p><i>Sub Contractor(Second Party)</i></p>
+                            <p><strong><span t-esc="o.company_id.name"/> </strong></p>
+                            <p><i>Signature:</i></p>
+                            <br/>
+                            <p><i>Date:</i></p>
+
                         </div>
                     </div>
-                <div class="footer" style="font-size:16px;border-top:1px solid black;">
+
+
+                </div>
+
+                <div class="footer" style="font-size:16px;border-top:1px solid black;text-align:center;">
                     <p>Tel.: 06-5345347 Fax : 06-5345990 P.O.Box : 27734  Sharjah – U.A.E. E- mail : info@almayasuae.com<br/>
                         Tel: 04-2257511 Fax : 04-2257511 P.O.Box : 234828  Dubai –U.A.E. Website : www.almayasuae.com  </p>
                 </div>

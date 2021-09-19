@@ -13,86 +13,214 @@
                     </div>
                     <div t-att-data-oe-model="doc._name" t-att-data-oe-id="doc.id" class="article">
                         <div class="page">
-<!--                            <div style="width:60%;border: 2px solid black; height:250px;display:block;float:left;">-->
-<!--                                <div style="text-align:center;"><b><u>Project Overview Report</u></b></div>-->
-<!--                                <div>-->
-<!--                                <div style="width:20%;float:left;font-size:14px;padding:5px 5px;">PROJECT </div>-->
-<!--                                <div style="width:80%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.name"/> </div>-->
-<!--                                </div>-->
-<!--                                <br/>-->
-<!--                                <div style="width:25%;float:left;font-size:14px;padding:5px 5px;">CONTRACTOR </div>-->
-<!--                                <div style="width:75%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.partner_id.name"/> </div>-->
-<!--                            </div>-->
-<!--                            <div style="width:40%;border: 2px solid black; height:250px;display:block;float:right;">-->
+                            <div style="width:100%;">
+                                <div style="width:60%;border: 2px solid black; height:350px;display:block;float:left;padding 0px 0px;">
+                                    <div style="text-align:center;"><b><u>Project Overview Report</u></b></div>
+                                    <div style="width:100%;">
+                                        <div style="width:30%;float:left;font-size:14px;padding:10px 10px;">Project </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:10px 10px;"><span t-esc="doc.name"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Contractor </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.partner_id.name"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Project Manager</div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.user_id.name"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Scope of Work </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.user_id.name"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Project Start </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.project_start_date"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Project End </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.project_end_date"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">No.of working days </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.working_days"/> </div>
+                                    </div>
+                                    <div>
+                                        <div style="width:50%;float:left;font-size:14px;padding:5px 5px;"><b>Actual Order Value(AED)</b> </div>
+                                        <div style="width:50%;float:right;font-size:14px;padding:5px 5px;"><b><span t-esc="doc.total_sale_cost"/></b></div>
+                                    </div>
+                                    <div style="width:100%;">
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <th style="width:33%;float:left;font-size:14px;border:1px solid black;"><b>JOB NO.</b></th>
+                                                <th style="width:33%;float:left;font-size:14px;border:1px solid black;"><b>Plot No.</b> </th>
+                                                <th style="width:34%;float:right;font-size:14px;border:1px solid black;"><b>Salesperson</b> </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:33%;float:left;font-size:14px;border:1px solid black;"><span t-esc="doc.job_order"/> </td>
+                                                <td style="width:33%;float:left;font-size:14px;border:1px solid black;"><span t-esc="doc.plot_no"/> </td>
+                                                <td style="width:34%;float:right;font-size:14px;border:1px solid black;"><span t-esc="doc.s_person.name"/> </td>
+                                            </tr>
+                                        </table>
 
-<!--                            </div>-->
+                                    </div>
+                                </div>
+                                <div style="width:40%;border: 2px solid black; height:350px;display:block;float:right;">
+                                    <div name="left-upper-side" class="col-12">
+                                        <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 70px;" alt="Logo"/>
+                                    </div>
+                                    <div style="width:100%;">
+                                        <h3><b><span t-esc="doc.company_id.name" style="padding-left:5px;"/> </b></h3>
+                                    </div>
 
-                            <div>
-                                <h3>
-                                    <strong><span t-field="doc.name"/></strong>
-                                </h3>
-                                <h4>
-                                    <table class="table">
-                                        <tr style="border: 2px solid black;">
-                                            <td><strong>Customer</strong></td>
-                                            <td><strong>Project Manager</strong></td>
-                                            <!--                                    <td><strong>Project State</strong></td-->
-                                        </tr>
-                                        <tr style="border: 2px solid black;">
-                                            <td><span t-field="doc.partner_id.name"/></td>
-                                            <td><span t-field="doc.user_id.name"/></td>
-                                            <!--                                    <td><span t-field="doc.state"/></td-->
-                                        </tr>
-                                    </table>
-                                </h4>
-                                <h3>
-                                    <strong>Construction Site Detail:</strong>
-                                </h3>
-                                <h4>
-                                    <table class="table">
-                                        <tr style="border: 2px solid black;">
-                                            <td><strong>Types of Construction</strong></td>
-                                            <td><strong>Location</strong></td>
-                                        </tr>
-                                        <tr style="border: 2px solid black;">
-                                            <td><span t-field="doc.construction_type.name"/></td>
-                                            <td>
-                                                <div name="invoice_address">
-                                                    <address t-field="doc.location_id"
-                                                             t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </h4>
-                                <h3>
-                                    <strong>Tasks:</strong>
-                                </h3>
-                                <table class="table table-responsive">
-                                    <tr style="border: 2px solid black;">
-                                        <th>Task Name</th>
-                                        <th>Planned Hours</th>
-                                        <th>Spent Hours</th>
-                                        <th>Remaining Hours</th>
-                                        <th>Assigned To</th>
-                                        <th>Assigning Date</th>
-                                        <th>Deadline</th>
-                                        <th>Stage</th>
-                                    </tr>
-                                    <t t-foreach="doc.task_ids" t-as="task">
-                                        <tr style="border: 2px solid black;">
-                                            <td><span t-field="task.name"/></td>
-                                            <td><span t-field="task.planned_hours" /></td>
-                                            <td><span t-field="task.effective_hours" /></td>
-                                            <td><span t-field="task.remaining_hours" /></td>
-                                            <td><span t-field="task.user_id.name"/></td>
-                                            <td><span t-field="task.date_assign"/></td>
-                                            <td><span t-field="task.date_deadline"/></td>
-                                            <td><span t-field="task.stage_id.name"/></td>
-                                        </tr>
-                                    </t>
-                                </table>
+                                </div>
                             </div>
+                            <t t-set="plan" t-value="doc.planned_material_cost+doc.planned_labour_cost"/>
+                            <t t-set="actual" t-value="doc.total_material_cost+doc.total_labour_cost+doc.other_expenses"/>
+
+
+                            <table style="width:100%;">
+                                <tr>
+                                    <td style="border:1px solid black;height:50px;padding:10px 10px;" colspan="5"><strong><u>Project Costing - Planned vs Actual</u></strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;padding-left:10px;"><strong>Total Cost-Planned</strong></td>
+                                    <td style="border:1px solid black;width:20%;padding-left:10px;"><strong>Total Cost-Actual</strong></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;">Materials</td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"><span t-esc="doc.planned_material_cost"/> </td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"><span t-esc="doc.total_material_cost"/></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;">Labour</td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"><span t-esc="doc.planned_labour_cost"/> </td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"><span t-esc="doc.total_labour_cost"/></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;">Other Expenses</td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;" colspan="2"><span t-esc="doc.other_expenses"/> </td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Total Cost-AED</b></td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"><b><span t-esc="plan"/></b> </td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"><b><span t-esc="actual"/></b></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+
+                            </table>
+
+                            <table style="width:100%;border:1px solid black;">
+                                <tr>
+                                    <td style="border:1px solid black;height:50px;padding:10px 10px;" colspan="5"><strong><u>Material Consumption</u></strong></td>
+                                </tr>
+                                <tr>
+                                    <th style="width:20%;">Items</th>
+                                    <th style="width:20%;">Quantity Used</th>
+                                    <th style="width:20%;">Rate</th>
+                                    <th style="width:20%;">Amount</th>
+                                    <th style="width:20%;"></th>
+                                </tr>
+                                <tr t-foreach="doc.project_material_plan_ids" t-as="material">
+                                    <td style="width:20%;"><span t-esc="material.product_id.name"/></td>
+                                    <td style="width:20%;"><span t-esc="material.product_uom_qty"/> </td>
+                                    <td style="width:20%;"><span t-esc="material.unit_price"/></td>
+                                    <td style="width:20%;"><span t-esc="material.total_cost"/></td>
+                                    <td style="width:20%;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Total Amount-AED</b></td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"> </td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.planned_material_cost"/></b></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                            </table>
+                            <table style="width:100%;border:1px solid black;">
+                                <tr>
+                                    <td style="border:1px solid black;height:50px;padding:10px 10px;" colspan="5"><strong><u>Labour Costing</u></strong></td>
+                                </tr>
+                                <tr>
+                                    <th style="width:20%;">Tasks</th>
+                                    <th style="width:20%;">No. of Hours</th>
+                                    <th style="width:20%;">Rate</th>
+                                    <th style="width:20%;">Amount</th>
+                                    <th style="width:20%;"></th>
+                                </tr>
+                                <tr t-foreach="doc.project_labour_plan_ids" t-as="labour">
+                                    <td style="width:20%;"><span t-esc="labour.task_id.name"/></td>
+                                    <td style="width:20%;"><span t-esc="labour.working_hours"/> </td>
+                                    <td style="width:20%;"><span t-esc="labour.unit_price"/></td>
+                                    <td style="width:20%;"><span t-esc="labour.total_cost"/></td>
+                                    <td style="width:20%;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Total Amount-AED</b></td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"> </td>
+                                    <td style="border:1px solid black;width:20%;text-align:right;"></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.planned_labour_cost"/></b></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+
+                            </table>
+                            <t t-set="tp" t-value="doc.untaxed_sale_cost-plan"/>
+                            <t t-set="ap" t-value="doc.untaxed_sale_cost-actual"/>
+                            <t t-set="tpp" t-value="tp/doc.untaxed_sale_cost"/>
+                            <t t-set="app" t-value="ap/doc.untaxed_sale_cost"/>
+
+                            <table style="width:100%;">
+                                <tr>
+                                    <td style="border:1px solid black;height:50px;padding:10px 10px;" colspan="5"><strong><u>Profitability</u></strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Contract Value</b></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.untaxed_sale_cost" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b> </td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Theoretical Cost</b></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="plan" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b> </td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Actual Cost</b></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="actual" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b> </td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Theoretical Profit Margin</b></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="tp" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/> </b> </td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="tpp" t-options='{"widget": "float", "precision": 2}'/> % </b></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid black;width:20%;"><b>Actual Profit Margin</b></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="ap" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/> </b> </td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="app" t-options='{"widget": "float", "precision": 2}'/> % </b></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"></td>
+                                </tr>
+                            </table>
+
                         </div>
                     </div>
                 </t>
