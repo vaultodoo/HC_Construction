@@ -26,11 +26,11 @@
                                     </div>
                                     <div>
                                         <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Project Manager</div>
-                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.user_id.name"/> </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.project_manager.name"/> </div>
                                     </div>
                                     <div>
                                         <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Scope of Work </div>
-                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span t-esc="doc.user_id.name"/> </div>
+                                        <div style="width:70%;float:right;font-size:14px;padding:5px 5px;"><span></span></div>
                                     </div>
                                     <div>
                                         <div style="width:30%;float:left;font-size:14px;padding:5px 5px;">Project Start </div>

@@ -59,6 +59,8 @@ class ProjectProject(models.Model):
     stage_allocated = fields.Boolean(tracking=True)
     sales_person = fields.Many2one('res.users', string="User",tracking=True)
     s_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
+    project_manager = fields.Many2one('hr.employee', string="Project Manager", tracking=True)
+    user_id = fields.Many2one('res.users',string='Project User',default=lambda self: self.env.user,tracking=True)
     job_order = fields.Char(string="Job Order",tracking=True)
     plot_no = fields.Char(string="Plot No",tracking=True)
     document_ids = fields.One2many('upload.documents', 'project_id', string="Documents",tracking=True)
@@ -92,17 +94,15 @@ class ProjectProject(models.Model):
     project_end_date = fields.Date()
     working_days = fields.Char(string="No. of working days")
 
-
     def get_invoice_amount(self):
         for rec in self:
-            rec.paid_invoice_amount = sum(self.env['proforma.invoice'].search([('project_id', '=', rec.id), ('state', '=', 'paid')]).mapped('tax_included'))
-            rec.pending_invoice_amount = sum(self.env['proforma.invoice'].search([('project_id', '=', rec.id), ('state', '=', 'new')]).mapped('tax_included'))
+            rec.paid_invoice_amount = sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_total'))-sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_residual'))
+            rec.pending_invoice_amount = sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_residual'))
 
     def get_project_value(self):
         for rec in self:
-            if rec.sale_order_id:
-                rec.total_sale_cost = rec.sale_order_id.amount_total
-                rec.untaxed_sale_cost = rec.sale_order_id.amount_untaxed
+            rec.total_sale_cost = rec.sale_order_id.amount_total if rec.sale_order_id else 0.0
+            rec.untaxed_sale_cost = rec.sale_order_id.amount_untaxed if rec.sale_order_id else 0.0
             if rec.project_task_ids:
                 material = 0.0
                 employee_cost = 0.0
@@ -130,13 +130,13 @@ class ProjectProject(models.Model):
         if exists:
             raise ValidationError("You cannot create multiple projects with same job order")
 
-    @api.onchange('contract_date', 'job_order', 's_person', 'user_id')
+    @api.onchange('contract_date', 'job_order', 's_person', 'project_manager')
     def get_sale_order_details(self):
         if self.sale_order_id:
             self.sale_order_id.contract_date = self.contract_date
             self.sale_order_id.job_order = self.job_order
             self.sale_order_id.sales_person = self.s_person.id
-            self.sale_order_id.project_manager = self.user_id.id
+            self.sale_order_id.project_manage = self.project_manager.id
 
     @api.depends()
     def _compute_notes_count(self):
@@ -376,21 +376,24 @@ class SaleOrder(models.Model):
     project_name = fields.Char(string="Project Name")
     job_order = fields.Char(string="Job Order")
     contract_date = fields.Date(string="PO/Contract Date")
-    project_manager = fields.Many2one('res.users', string="Project Manager")
+    project_manager = fields.Many2one('res.users', string="Project User")
+    project_manage = fields.Many2one('hr.employee', string="Project Manager")
+
     sales_person = fields.Many2one('hr.employee', string="Sales Person", tracking=True)
+    sales_target = fields.Float(related='sales_person.sales_target', store=True)
     validity = fields.Char(string="Validity")
     user_id = fields.Many2one(
         'res.users',string='User',index=True,tracking=2,default=lambda self: self.env.user,
         domain=lambda self: [('groups_id','in',self.env.ref('sales_team.group_sale_salesman').id)])
 
-    @api.onchange('contract_date', 'job_order', 'project_manager', 'sales_person')
+    @api.onchange('contract_date', 'job_order', 'project_manage', 'sales_person')
     def onchange_sale_order_details(self):
         if self.project_ids:
             for pro in self.project_ids:
                 pro.contract_date = self.contract_date
                 pro.job_order = self.job_order
                 pro.s_person = self.sales_person.id
-                pro.user_id = self.project_manager.id
+                pro.project_manager = self.project_manage.id
 
     @api.model
     def create(self, vals):
@@ -398,7 +401,7 @@ class SaleOrder(models.Model):
             seq_date = None
             if 'date_order' in vals:
                 seq_date = fields.Datetime.context_timestamp(self,fields.Datetime.to_datetime(vals['date_order']))
-            initial = self.env['res.users'].search([('id','=',vals.get('user_id'))]).partner_id.partner_initial
+            initial = self.env['hr.employee'].search([('user_id', '=', vals.get('user_id'))]).employee_initial
             split_seq = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
                 'sale.order.seq',sequence_date=seq_date).split('/')[2]
             initial_split_concat = initial + "-" + split_seq if initial else split_seq
@@ -490,7 +493,7 @@ class SaleOrderLine(models.Model):
             'active': True,
             'company_id': self.company_id.id,
             's_person': self.order_id.sales_person.id,
-            'user_id': self.order_id.project_manager.id
+            'project_manager': self.order_id.project_manage.id
         }
 
 class ConstructionType(models.Model):
@@ -597,5 +600,7 @@ class AccountInvoiceReport(models.Model):
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
     monthly_target = fields.Float(string="Monthly Target")
+    sales_target = fields.Float(string="Sales Target")
+    employee_initial = fields.Char(string="Employee Initial")
 
 
