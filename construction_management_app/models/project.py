@@ -401,7 +401,7 @@ class SaleOrder(models.Model):
             seq_date = None
             if 'date_order' in vals:
                 seq_date = fields.Datetime.context_timestamp(self,fields.Datetime.to_datetime(vals['date_order']))
-            initial = self.env['hr.employee'].search([('user_id', '=', vals.get('user_id'))]).employee_initial
+            initial = self.env['hr.employee'].search([('id', '=', vals.get('sales_person'))]).employee_initial
             split_seq = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
                 'sale.order.seq',sequence_date=seq_date).split('/')[2]
             initial_split_concat = initial + "-" + split_seq if initial else split_seq
@@ -541,6 +541,18 @@ class AccountMove(models.Model):
                                       default=lambda self: self.env.user)
     monthly_target = fields.Float(string="Monthly Target", related='sales_person.monthly_target', store=True)
 
+    amount_paid = fields.Float(compute='get_amount_paid_total')
+    paid_amount = fields.Float(compute='get_paid_amount', store=True)
+
+    def get_amount_paid_total(self):
+        for rec in self:
+            rec.amount_paid = rec.amount_total - rec.amount_residual
+
+    @api.depends('amount_paid')
+    def get_paid_amount(self):
+        for rec in self:
+            rec.paid_amount = rec.amount_paid
+
 
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"
@@ -579,22 +591,41 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
         return invoice_vals
 
+
 class AccountInvoiceReport(models.Model):
     _inherit = "account.invoice.report"
 
-    invoice_user_id = fields.Many2one('res.users',string='User',readonly=True)
+    invoice_user_id = fields.Many2one('res.users', string='User',readonly=True)
     sales_person = fields.Many2one('hr.employee', string="Sales Person")
     monthly_target = fields.Float(string="Monthly Target", related='sales_person.monthly_target', store=True)
+    paid_amount = fields.Float(string="Amount Paid")
 
 
     _depends = {
         'account.move': ['sales_person']}
 
     def _select(self):
-        return super(AccountInvoiceReport, self)._select() + ", move.sales_person as sales_person, move.monthly_target"
+        return super(AccountInvoiceReport, self)._select() + ", move.sales_person as sales_person, move.monthly_target, move.paid_amount"
 
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", move.sales_person, move.monthly_target"
+        return super(AccountInvoiceReport, self)._group_by() + ", move.sales_person, move.monthly_target, move.paid_amount"
+
+
+class SalesReport(models.Model):
+    _inherit = 'sale.report'
+
+    user_id = fields.Many2one('res.users','User',readonly=True)
+    sales_person = fields.Many2one('hr.employee',string="Sales Person")
+    sales_target = fields.Float(related='sales_person.sales_target',store=True)
+
+    def _query(self, with_clause='', fields={}, groupby='', from_clause=''):
+        fields['sales_person'] = ", s.sales_person as sales_person"
+        fields['sales_target'] = ', s.sales_target as sales_target'
+
+        groupby += ', s.invoice_status'
+
+        return super(SalesReport, self)._query(with_clause, fields, groupby, from_clause)
+
 
 
 class HrEmployee(models.Model):

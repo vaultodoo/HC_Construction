@@ -177,8 +177,8 @@
                             </table>
                             <t t-set="tp" t-value="doc.untaxed_sale_cost-plan"/>
                             <t t-set="ap" t-value="doc.untaxed_sale_cost-actual"/>
-                            <t t-set="tpp" t-value="tp/doc.untaxed_sale_cost"/>
-                            <t t-set="app" t-value="ap/doc.untaxed_sale_cost"/>
+                            <t t-set="tpp" t-value="(tp/doc.untaxed_sale_cost)*100"/>
+                            <t t-set="app" t-value="(ap/doc.untaxed_sale_cost)*100"/>
 
                             <table style="width:100%;">
                                 <tr>

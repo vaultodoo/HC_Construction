@@ -11,7 +11,7 @@
             </field>
         </record>
 
-                <record id="view_project_search_inherit" model="ir.ui.view">
+        <record id="view_project_search_inherit" model="ir.ui.view">
             <field name="name">project.project.search</field>
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.view_project_project_filter"/>
@@ -160,7 +160,7 @@
                         </group>
                         <group>
                             <field name="contract_date"/>
-<!--                            <field name="user_id" string="Project Manager" attrs="{'readonly':[('active','=',False)]}"/>-->
+                            <!--                            <field name="user_id" string="Project Manager" attrs="{'readonly':[('active','=',False)]}"/>-->
                             <field name="project_manager"/>
                             <field name="construction_type"/>
                             <!--                            <field name="location_id" context="{'search_default_customer':1, 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>-->
@@ -332,8 +332,8 @@
                     <field name="contract_date" attrs="{'invisible': [('project_ids', '=', [])]}"/>
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
-                    <field name="sales_person"/>
-                    <field name="project_manage"/>
+                    <field name="sales_person" required="1"/>
+                    <field name="project_manage" required="1"/>
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -347,15 +347,39 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_sales_order_filter"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='user_id']" position="replace">
+                <xpath expr="//field[@name='user_id']" position="after">
                     <field name="sales_person"/>
                 </xpath>
+                <xpath expr="//field[@name='user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
                 <xpath expr="//filter[@name='salesperson']" position="replace">
                     <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'sales_person'}"/>
                 </xpath>
 
             </field>
         </record>
+
+        <record id="sale_report_search_project_inherit" model="ir.ui.view">
+            <field name="name">sale.report.project.search.view.inherit</field>
+            <field name="model">sale.report</field>
+            <field name="inherit_id" ref="sale.view_order_product_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="sales_person"/>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='User']" position="replace">
+                    <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'sales_person'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
 
         <record id="sale_order_timesheet_form_project_inherit" model="ir.ui.view">
             <field name="name">sale.order.timesheet.project.view.inherit</field>
@@ -377,26 +401,32 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='invoice_user_id']" position="before">
                     <field name="sales_person"/>
+                    <field name="amount_paid" invisible="1"/>
+                    <field name="paid_amount" invisible="1"/>
                 </xpath>
             </field>
         </record>
 
-         <record id="account_move_invoice_search_inherit_project_cons" model="ir.ui.view">
+        <record id="account_move_invoice_search_inherit_project_cons" model="ir.ui.view">
             <field name="name">account.move.search.construction</field>
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_account_invoice_filter"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='invoice_user_id']" position="replace">
+                <xpath expr="//field[@name='invoice_user_id']" position="after">
                     <field name="sales_person" string="Salesperson"/>
                 </xpath>
-                                <xpath expr="//filter[@name='salesperson']" position="replace">
+                <xpath expr="//field[@name='invoice_user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='salesperson']" position="replace">
                     <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'sales_person'}"/>
                 </xpath>
 
             </field>
         </record>
 
-        <record id="view_account_invoice_report_search_inherit_project_cons" model="ir.ui.view">
+        <record id="account_invoice_report_inherit_project_cons" model="ir.ui.view">
             <field name="name">account.invoice.report.construction</field>
             <field name="model">account.invoice.report</field>
             <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
@@ -404,9 +434,18 @@
                 <xpath expr="//field[@name='invoice_user_id']" position="after">
                     <field name="sales_person"/>
                 </xpath>
-            </field>
+                <xpath expr="//field[@name='invoice_user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
 
+                <xpath expr="//filter[@name='user']" position="replace">
+                    <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'sales_person'}"/>
+                </xpath>
+
+            </field>
         </record>
+
+
 
         <record id="hr_employee_view_form_inherit_timesheet_project_cons" model="ir.ui.view">
             <field name="name">hr.employee.construction</field>
