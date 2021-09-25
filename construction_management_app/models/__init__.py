@@ -10,5 +10,6 @@ from . import purchase_requisition
 from . import project_phase_template
 from . import proforma_invoice
 from . import location_settings
+from . import project_report
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -73,7 +73,7 @@ class ProjectProject(models.Model):
     )
     project_labour_plan_ids = fields.One2many('labour.plan', 'project_id', 'Labour Plannings',tracking=True)
     contract_date = fields.Date(string="PO/Contract Date",tracking=True)
-    invoice_count = fields.Integer(related="sale_order_id.invoice_count", store=True)
+    invoice_count = fields.Integer(compute='compute_proforma_count')
     proforma_count = fields.Integer(compute='compute_proforma_count')
     proforma_paid = fields.Integer(compute='compute_proforma_count')
     proforma_pending = fields.Integer(compute='compute_proforma_count')
@@ -96,8 +96,13 @@ class ProjectProject(models.Model):
 
     def get_invoice_amount(self):
         for rec in self:
-            rec.paid_invoice_amount = sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_total'))-sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_residual'))
-            rec.pending_invoice_amount = sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_residual'))
+            paid = 0.0
+            pending = 0.0
+            if rec.sale_order_id:
+                paid = sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_total'))-sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_residual'))
+                pending= sum(self.env['account.move'].search([('sale_order_id', '=', rec.sale_order_id.id)]).mapped('amount_residual'))
+            rec.paid_invoice_amount = paid
+            rec.pending_invoice_amount = pending
 
     def get_project_value(self):
         for rec in self:
@@ -148,7 +153,7 @@ class ProjectProject(models.Model):
         for rec in self:
             res = self.env.ref('construction_management_app.action_project_note_note')
             res = res.read()[0]
-            res['domain'] = str([('project_id','in',rec.ids)])
+            res['domain'] = str([('project_id', 'in', rec.ids)])
         return res
 
     @api.model
@@ -210,6 +215,7 @@ class ProjectProject(models.Model):
             rec.proforma_count = self.env['proforma.invoice'].search_count([('project_id', '=', rec.id)])
             rec.proforma_pending = self.env['proforma.invoice'].search_count([('project_id', '=', rec.id), ('state', '=', 'new')])
             rec.proforma_paid = self.env['proforma.invoice'].search_count([('project_id', '=', rec.id), ('state', '=', 'paid')])
+            rec.invoice_count = self.env['account.move'].search_count([('sale_order_id', '=', rec.sale_order_id.id)])
 
     def action_view_proforma(self):
         proformas = self.env['proforma.invoice'].search([('project_id', '=', self.id)]).ids
@@ -224,35 +230,14 @@ class ProjectProject(models.Model):
     
     def action_open_sale_invoices(self):
         if self.sale_order_id:
-            invoices = self.sale_order_id.mapped('invoice_ids')
-            action = self.env.ref('account.action_move_out_invoice_type').read()[0]
-            if len(invoices) > 1:
-                action['domain'] = [('id','in',invoices.ids)]
-            elif len(invoices) == 1:
-                form_view = [(self.env.ref('account.view_move_form').id,'form')]
-                if 'views' in action:
-                    action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
-                else:
-                    action['views'] = form_view
-                action['res_id'] = invoices.id
-            else:
-                action = {'type': 'ir.actions.act_window_close'}
-
-            context = {
-                'default_type': 'out_invoice',
+            invoices = self.env['account.move'].search([('sale_order_id', '=', self.sale_order_id.id)]).ids
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Account Invoices',
+                'view_mode': 'tree,form',
+                'res_model': 'account.move',
+                'domain': [('id', 'in', invoices)],
             }
-            if len(self.sale_order_id) == 1:
-                context.update({
-                    'default_partner_id': self.sale_order_id.partner_id.id,
-                    'default_partner_shipping_id': self.sale_order_id.partner_shipping_id.id,
-                    'default_invoice_payment_term_id': self.sale_order_id.payment_term_id.id or self.sale_order_id.partner_id.property_payment_term_id.id or
-                                                       self.env['account.move'].default_get(
-                                                           ['invoice_payment_term_id']).get('invoice_payment_term_id'),
-                    'default_invoice_origin': self.sale_order_id.mapped('name'),
-                    'default_user_id': self.sale_order_id.user_id.id,
-                })
-            action['context'] = context
-            return action
 
     def generate_transfer(self):
         if self.project_material_plan_ids:
@@ -260,14 +245,14 @@ class ProjectProject(models.Model):
             for task in transfer_lines:
                 transfers = self.project_material_plan_ids.filtered(lambda l: l.transfer_generated != 'yes' and l.material_task_id.id == task.id)
                 values = {
-                    'custom_project_id':self.id,
-                    'custom_task_id':task.id,
+                    'custom_project_id': self.id,
+                    'custom_task_id': task.id,
                     'requisition_line_ids': [(0, 0, {
-                        'requisition_type':'internal',
-                        'product_id':t.product_id.id,
-                        'description':t.description,
-                        'qty':t.product_uom_qty,
-                        'uom':t.product_uom.id
+                        'requisition_type': 'internal',
+                        'product_id': t.product_id.id,
+                        'description': t.description,
+                        'qty': t.product_uom_qty,
+                        'uom': t.product_uom.id
                     }) for t in transfers],
                     'location_id': self.source_location_id.id,
                     'dest_location_id': self.dest_location_id.id,
@@ -418,7 +403,7 @@ class SaleOrder(models.Model):
             vals['partner_shipping_id'] = vals.setdefault('partner_shipping_id',addr['delivery'])
             vals['pricelist_id'] = vals.setdefault('pricelist_id',
                                                    partner.property_product_pricelist and partner.property_product_pricelist.id)
-        result = super(SaleOrder,self).create(vals)
+        result = super(SaleOrder, self).create(vals)
         return result
 
     def action_open_sale_project(self):

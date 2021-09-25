@@ -131,11 +131,11 @@
                                     <th style="width:20%;">Amount</th>
                                     <th style="width:20%;"></th>
                                 </tr>
-                                <tr t-foreach="doc.project_material_plan_ids" t-as="material">
-                                    <td style="width:20%;"><span t-esc="material.product_id.name"/></td>
-                                    <td style="width:20%;"><span t-esc="material.product_uom_qty"/> </td>
-                                    <td style="width:20%;"><span t-esc="material.unit_price"/></td>
-                                    <td style="width:20%;"><span t-esc="material.total_cost"/></td>
+                                <tr t-foreach="get_details['materials']" t-as="material">
+                                    <td style="width:20%;"><span t-esc="material['product']"/></td>
+                                    <td style="width:20%;"><span t-esc="material['qty']"/> </td>
+                                    <td style="width:20%;"><span t-esc="material['rate']"/></td>
+                                    <td style="width:20%;"><span t-esc="material['total']"/></td>
                                     <td style="width:20%;"></td>
                                 </tr>
 
@@ -143,7 +143,7 @@
                                     <td style="border:1px solid black;width:20%;"><b>Total Amount-AED</b></td>
                                     <td style="border:1px solid black;width:20%;text-align:right;"> </td>
                                     <td style="border:1px solid black;width:20%;text-align:right;"></td>
-                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.planned_material_cost"/></b></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.total_material_cost"/></b></td>
                                     <td style="border:1px solid black;width:20%;"></td>
                                 </tr>
                             </table>
@@ -153,25 +153,27 @@
                                 </tr>
                                 <tr>
                                     <th style="width:20%;">Tasks</th>
+                                    <th style="width:20%;">Name</th>
                                     <th style="width:20%;">No. of Hours</th>
                                     <th style="width:20%;">Rate</th>
                                     <th style="width:20%;">Amount</th>
-                                    <th style="width:20%;"></th>
+
                                 </tr>
-                                <tr t-foreach="doc.project_labour_plan_ids" t-as="labour">
-                                    <td style="width:20%;"><span t-esc="labour.task_id.name"/></td>
-                                    <td style="width:20%;"><span t-esc="labour.working_hours"/> </td>
-                                    <td style="width:20%;"><span t-esc="labour.unit_price"/></td>
-                                    <td style="width:20%;"><span t-esc="labour.total_cost"/></td>
-                                    <td style="width:20%;"></td>
+                                <tr t-foreach="get_details['labours']" t-as="labour">
+                                    <td style="width:20%;"><span t-esc="labour['task']"/></td>
+                                    <td style="width:20%;"><span t-esc="labour['name']"/> </td>
+                                    <td style="width:20%;"><span t-esc="labour['time']"/></td>
+                                    <td style="width:20%;"><span t-esc="labour['price']"/></td>
+                                    <td style="width:20%;"><span t-esc="labour['total']"/></td>
                                 </tr>
 
                                 <tr>
                                     <td style="border:1px solid black;width:20%;"><b>Total Amount-AED</b></td>
                                     <td style="border:1px solid black;width:20%;text-align:right;"> </td>
                                     <td style="border:1px solid black;width:20%;text-align:right;"></td>
-                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.planned_labour_cost"/></b></td>
                                     <td style="border:1px solid black;width:20%;"></td>
+                                    <td style="border:1px solid black;width:20%;"><b><span t-esc="doc.total_labour_cost"/></b></td>
+
                                 </tr>
 
                             </table>
