@@ -546,6 +546,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
         invoice_vals = {
             'ref': order.client_order_ref,
             'type': 'out_invoice',
+            'sale_order_id': order.id,
             'invoice_origin': order.name,
             'invoice_user_id': order.user_id.id,
             'narration': order.note,
